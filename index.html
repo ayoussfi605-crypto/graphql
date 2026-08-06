@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zone01- Profile</title>
+     <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+
+<div class="login-container">
+
+    <h1>GraphQL Profile</h1>
+
+    <form id="login-form">
+
+        <label for="identifier">Username or Email</label>
+        <input
+            id="identifier"
+            type="text"
+            placeholder="Username or Email"
+        >
+
+        <label for="password">Password</label>
+        <input
+            id="password"
+            type="password"
+            placeholder="Password"
+        >
+
+        <button type="submit">
+            Sign In
+        </button>
+
+        <p id="error-message"></p>
+
+    </form>
+
+</div>
+
+<script type="module" src="./js/login.js"></script>
+
+</body>
+</html>
