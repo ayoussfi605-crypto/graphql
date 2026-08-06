@@ -18,10 +18,19 @@ export function renderLogin() {
 
             console.log("Login successful");
             console.log(localStorage.getItem("token"));
+            window.location.href = "profile.html";
+
         } else {
-            console.log("Invalid credentials");
+            const errBox = document.getElementById("error-message");
+
+            errBox.textContent = "Invalid credentials";
+
+            setTimeout(() => {
+                errBox.textContent = "";
+            }, 2000);
         }
     });
 }
 
 renderLogin();
+//
