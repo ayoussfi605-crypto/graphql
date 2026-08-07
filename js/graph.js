@@ -92,3 +92,41 @@ export function drawPoints(points) {
     });
 
 }
+
+
+export function drawAxes() {
+
+    const svg = document.getElementById("xp-graph");
+
+    // Y Axis
+    const yAxis = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "line"
+    );
+
+    yAxis.setAttribute("x1", 40);
+    yAxis.setAttribute("y1", 20);
+    yAxis.setAttribute("x2", 40);
+    yAxis.setAttribute("y2", 320);
+
+    yAxis.setAttribute("stroke", "#666");
+    yAxis.setAttribute("stroke-width", "2");
+
+    svg.appendChild(yAxis);
+
+    // X Axis
+    const xAxis = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "line"
+    );
+
+    xAxis.setAttribute("x1", 40);
+    xAxis.setAttribute("y1", 320);
+    xAxis.setAttribute("x2", 680);
+    xAxis.setAttribute("y2", 320);
+
+    xAxis.setAttribute("stroke", "#666");
+    xAxis.setAttribute("stroke-width", "2");
+
+    svg.appendChild(xAxis);
+}
