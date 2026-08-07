@@ -63,3 +63,32 @@ export function drawXPGraph(pointsString) {
     svg.appendChild(polyline);
 
 }
+
+
+export function drawPoints(points) {
+
+    const svg = document.getElementById("xp-graph");
+
+    points.forEach((point, index) => {
+
+        if (
+            index === 0 ||
+            index === points.length - 1 ||
+            index % 10 === 0
+        ) {
+
+            const circle = document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "circle"
+            );
+
+            circle.setAttribute("cx", point.x);
+            circle.setAttribute("cy", point.y);
+            circle.setAttribute("r", "4");
+            circle.setAttribute("fill", "#4f46e5");
+
+            svg.appendChild(circle);
+        }
+    });
+
+}
