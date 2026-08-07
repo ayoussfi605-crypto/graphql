@@ -44,3 +44,22 @@ export function pointsToString(points) {
         .join(" ");
 
 }
+
+
+export function drawXPGraph(pointsString) {
+
+    const svg = document.getElementById("xp-graph");
+
+    const polyline = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "polyline"
+    );
+
+    polyline.setAttribute("points", pointsString);
+    polyline.setAttribute("fill", "none");
+    polyline.setAttribute("stroke", "#4f46e5");
+    polyline.setAttribute("stroke-width", "3");
+
+    svg.appendChild(polyline);
+
+}
