@@ -36,3 +36,11 @@ export function calculatePoints(xp) {
 
     return point;
 }
+
+export function pointsToString(points) {
+
+    return points
+        .map(point => `${point.x},${point.y}`)
+        .join(" ");
+
+}
