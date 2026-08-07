@@ -171,4 +171,18 @@ if (!isAuthenticated()) {
 
 document.getElementById("logout-btn").addEventListener("click", logout);
 
+
+function formatXP(xp) {
+    if (xp >= 1000000) {
+        return (xp / 1000000).toFixed(2) + " MB";
+    }
+
+    if (xp >= 1000) {
+        return (xp / 1000).toFixed(2) + " kB";
+    }
+
+    return xp + " B";
+}
+
+
 renderProfile();
