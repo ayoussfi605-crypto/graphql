@@ -185,4 +185,20 @@ function formatXP(xp) {
 }
 
 
+function getBestSkills(skills) {
+    const best = {};
+    skills.forEach(skill => {
+
+        if(
+            !best[skill.type] ||
+            skill.amount > best[skill.type]
+        ){
+            best[skill.type] = skill.amount;
+        }
+
+    });
+
+    return best;
+}
+
 renderProfile();
