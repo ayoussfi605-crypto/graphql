@@ -225,3 +225,84 @@ export function drawXLabels(transactions) {
         svg.appendChild(text);
     });
 }
+
+export function calculateSkillPoints(bestSkills) {
+    const width = 610;
+    const height = 300;
+
+    const offsetX = 70;
+    const offsetY = 20;
+
+    const skills = Object.entries(bestSkills);
+    const maxValue = Math.max(...skills.map(skill => skill[1]));
+
+    const points = [];
+
+    skills.forEach(([name, value], index) => {
+
+        const x =
+            offsetX +
+            (index / (skills.length - 1)) * width;
+
+        const y =
+            offsetY +
+            height -
+            (value / maxValue) * height;
+
+        points.push({
+            x,
+            y,
+            name,
+            value
+        });
+    });
+
+    return {
+        points,
+        maxValue
+    };
+}
+
+export function drawSkillsGraph(points) {
+    const svg = document.getElementById("skills-graph");
+
+    const pointsString = points
+        .map(point => `${point.x},${point.y}`)
+        .join(" ");
+
+    const polyline = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "polyline"
+    );
+
+    polyline.setAttribute("points", pointsString);
+    polyline.setAttribute("fill", "none");
+    polyline.setAttribute("stroke", "#4f46e5");
+    polyline.setAttribute("stroke-width", "3");
+
+    svg.appendChild(polyline);
+}
+
+export function drawSkillLabels(points) {
+    const svg = document.getElementById("skills-graph");
+
+    points.forEach(point => {
+        const text = document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "text"
+        );
+
+        text.setAttribute("x", point.x);
+        text.setAttribute("y", 325);
+
+        text.setAttribute("font-size", "11");
+        text.setAttribute("text-anchor", "middle");
+
+        // skill_prog -> prog
+        const name = point.name.replace("skill_", "");
+
+        text.textContent = name;
+
+        svg.appendChild(text);
+    });
+}
