@@ -87,7 +87,7 @@ export function drawPoints(points) {
             circle.setAttribute("cx", point.x);
             circle.setAttribute("cy", point.y);
             circle.setAttribute("r", "4");
-            circle.setAttribute("fill", "#4f46e5");
+            circle.setAttribute("fill", "#83e14d");
 
             svg.appendChild(circle);
         }
@@ -176,4 +176,52 @@ function formatGraphXP(xp) {
     }
 
     return Math.round(xp) + " B";
+}
+
+
+export function drawXLabels(transactions) {
+    const svg = document.getElementById("xp-graph");
+
+    const width = 610;
+    const offsetX = 70;
+
+    const indexes = [
+        0,
+        Math.floor((transactions.length - 1) * 0.25),
+        Math.floor((transactions.length - 1) * 0.50),
+        Math.floor((transactions.length - 1) * 0.75),
+        transactions.length - 1
+    ];
+
+    indexes.forEach(index => {
+
+        const transaction = transactions[index];
+
+        const text = document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "text"
+        );
+
+        const x =
+            offsetX +
+            (index / (transactions.length - 1)) * width;
+
+        const date = new Date(transaction.createdAt);
+
+        const label =
+            date.getDate() +
+            "/" +
+            (date.getMonth() + 1);
+
+        text.setAttribute("x", x);
+        text.setAttribute("y", 345);
+
+        text.setAttribute("font-size", "12");
+        text.setAttribute("fill", "#666");
+        text.setAttribute("text-anchor", "middle");
+
+        text.textContent = label;
+
+        svg.appendChild(text);
+    });
 }
