@@ -15,26 +15,28 @@ export function cumulativeXP(transactions) {
 
 export function calculatePoints(xp) {
 
-    const width = 640;
+    const width = 610;
     const height = 300;
 
-    const offsetX = 40;
+    const offsetX = 70;
     const offsetY = 20;
     const maxXP = Math.max(...xp);
 
-    const point = [];
+    const points = [];
 
     xp.forEach((value, index) => {
         const x = offsetX + (index / (xp.length - 1)) * width;
 
         const y = offsetY + height - (value / maxXP) * height;
 
-        point.push({ x, y });
+        points.push({ x, y });
 
     });
-    console.log(point);
 
-    return point;
+     return {
+        points,
+        maxXP
+    };
 }
 
 export function pointsToString(points) {
@@ -104,9 +106,9 @@ export function drawAxes() {
         "line"
     );
 
-    yAxis.setAttribute("x1", 40);
+    yAxis.setAttribute("x1", 70);
     yAxis.setAttribute("y1", 20);
-    yAxis.setAttribute("x2", 40);
+    yAxis.setAttribute("x2", 70);
     yAxis.setAttribute("y2", 320);
 
     yAxis.setAttribute("stroke", "#666");
@@ -120,7 +122,7 @@ export function drawAxes() {
         "line"
     );
 
-    xAxis.setAttribute("x1", 40);
+    xAxis.setAttribute("x1", 70);
     xAxis.setAttribute("y1", 320);
     xAxis.setAttribute("x2", 680);
     xAxis.setAttribute("y2", 320);
@@ -129,4 +131,49 @@ export function drawAxes() {
     xAxis.setAttribute("stroke-width", "2");
 
     svg.appendChild(xAxis);
+}
+
+export function drawYLabels(maxXP) {
+    const svg = document.getElementById("xp-graph");
+
+    const values = [
+        maxXP,
+        maxXP * 0.75,
+        maxXP * 0.5,
+        maxXP * 0.25,
+        0
+    ];
+
+    values.forEach((value, index) => {
+
+        const text = document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "text"
+        );
+
+        const y = 20 + (index / 4) * 300;
+
+        text.setAttribute("x", 0);
+        text.setAttribute("y", y + 5);
+
+        text.setAttribute("font-size", "12");
+        text.setAttribute("fill", "#666");
+
+        text.textContent = formatGraphXP(value);
+
+        svg.appendChild(text);
+    });
+}
+
+function formatGraphXP(xp) {
+
+    if (xp >= 1000000) {
+        return (xp / 1000000).toFixed(1) + " MB";
+    }
+
+    if (xp >= 1000) {
+        return (xp / 1000).toFixed(1) + " kB";
+    }
+
+    return Math.round(xp) + " B";
 }
