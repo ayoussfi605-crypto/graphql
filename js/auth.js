@@ -11,8 +11,8 @@ export async function login(data) {
             }
         );
 
-        const token = await response.text();
-
+        const token = await response.json();
+        
         return {
             status: response.status,
             token,
@@ -21,4 +21,10 @@ export async function login(data) {
     } catch (error) {
         console.error("Error trying to login:", error);
     }
+}
+
+export function isAuthenticated() {
+
+    return localStorage.getItem("token") !== null;
+
 }

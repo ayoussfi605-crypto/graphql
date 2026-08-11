@@ -8,6 +8,11 @@ import {
     drawXPGraph,
     drawPoints,
     drawAxes,
+    drawYLabels,
+    drawXLabels,
+    calculateSkillPoints,
+    drawSkillsGraph,
+    drawSkillLabels
 } from "./graph.js";
 
 async function renderProfile() {
@@ -104,69 +109,85 @@ if (!isAuthenticated()) {
     const auditRatio = user.auditRatio;
     const skills = result.data.skills;
     const bestSkills = getBestSkills(result.data.skills);
+    
     const transactions = result.data.transactions;
- 
-
+    
+    
     document.getElementById("profile").innerHTML = `
-<div class="profile-header">
-
+    <div class="profile-header">
+    
     <img src="${avatar}" alt="Profile Picture" class="avatar">
-
+    
     <div>
-        <h2>Welcome back,</h2>
-        <h1>${user.login}</h1>
-        <p>${cohort}</p>
+    <h2>Welcome back,</h2>
+    <h1>${user.login}</h1>
+    <p>${cohort}</p>
     </div>
-
-</div>
-
-<div class="cards">
-
+    
+    </div>
+    
+    <div class="cards">
+    
     <div class="card">
-        <h3>Audit Ratio</h3>
-        <span>${auditRatio.toFixed(1)}</span>
+    <h3>Audit Ratio</h3>
+    <span>${auditRatio.toFixed(1)}</span>
     </div>
-
+    
     <div class="card">
-        <h3>Total XP</h3>
-        <span>${formatXP(totalXP)}</span>
+    <h3>Total XP</h3>
+    <span>${formatXP(totalXP)}</span>
     </div>
-
+    
     <div class="card">
-        <h3>Level</h3>
-        <span>${level}</span>
+    <h3>Level</h3>
+    <span>${level}</span>
     </div>
-
-</div>
-
-<div class="graphs">
-
+    
+    </div>
+    
+    <div class="graphs">
+    
     <div class="graph-card">
     
-
+    
     <h2>XP Progress</h2>
     
-        <svg id="xp-graph" width="700" height="350"></svg>
+    <svg id="xp-graph" width="700" height="350"></svg>
 
     </div>
-
+    
     <div class="graph-card">
-        <h2>Skills</h2>
-
-        <svg id="skills-graph" width="700" height="350"></svg>
+    <h2>Skills</h2>
+    
+    <svg id="skills-graph" width="700" height="350"></svg>
     </div>
-
-</div>
-`;
-
-   const xp = cumulativeXP(transactions);
-    const points = calculatePoints(xp)
+    
+    </div>
+    `;
+    
+    const xp = cumulativeXP(transactions);
+    
+    const graphData = calculatePoints(xp);
+    
+    const points = graphData.points;
+    const maxXP = graphData.maxXP;
+    
     const pointsString = pointsToString(points);
+    
     drawAxes();
+    drawYLabels(maxXP);
     drawXPGraph(pointsString);
     drawPoints(points);
-       
+    drawXLabels(transactions);
+    
+    const skillGraph = calculateSkillPoints(bestSkills);
 
+    drawSkillsGraph(skillGraph.points);
+    drawSkillLabels(skillGraph.points);
+
+    console.log(document.getElementById("skills-graph"));
+
+    drawSkillsGraph(skillGraph.points);
 }
 
 document.getElementById("logout-btn").addEventListener("click", logout);

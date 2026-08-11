@@ -17,7 +17,7 @@ export function renderLogin() {
             localStorage.setItem("token", result.token);
 
             console.log("Login successful");
-            console.log(localStorage.getItem("token"));
+            console.log("locl",localStorage.getItem("token"));
             window.location.href = "profile.html";
 
         } else {
