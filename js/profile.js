@@ -10,9 +10,7 @@ import {
     drawAxes,
     drawYLabels,
     drawXLabels,
-    calculateSkillPoints,
-    drawSkillsGraph,
-    drawSkillLabels
+    drawSkillsChart
 } from "./graph.js";
 
 async function renderProfile() {
@@ -156,10 +154,10 @@ if (!isAuthenticated()) {
 
     </div>
     
-    <div class="graph-card">
-    <h2>Skills</h2>
-    
-    <svg id="skills-graph" width="700" height="350"></svg>
+    <div class="graph-card skills-card">
+      <h2>Skills</h2>
+
+      <div id="skills-chart"></div>
     </div>
     
     </div>
@@ -179,15 +177,7 @@ if (!isAuthenticated()) {
     drawXPGraph(pointsString);
     drawPoints(points);
     drawXLabels(transactions);
-    
-    const skillGraph = calculateSkillPoints(bestSkills);
-
-    drawSkillsGraph(skillGraph.points);
-    drawSkillLabels(skillGraph.points);
-
-    console.log(document.getElementById("skills-graph"));
-
-    drawSkillsGraph(skillGraph.points);
+    drawSkillsChart(bestSkills);
 }
 
 document.getElementById("logout-btn").addEventListener("click", logout);

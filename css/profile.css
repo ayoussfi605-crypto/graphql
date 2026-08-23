@@ -84,3 +84,45 @@ body {
 .graph-card h2{
     margin-bottom:20px;
 }
+#skills-chart {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.skill {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.skill > span {
+    width: 100px;
+    color: #374151;
+    font-weight: 500;
+}
+
+.skill-bar {
+    position: relative;
+    flex: 1;
+    height: 25px;
+    background: #e5e7eb;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.skill-value {
+    height: 100%;
+    background: #4f46e5;
+    border-radius: 6px;
+}
+
+.skill-bar > span {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+}

@@ -226,83 +226,35 @@ export function drawXLabels(transactions) {
     });
 }
 
-export function calculateSkillPoints(bestSkills) {
-    const width = 610;
-    const height = 300;
 
-    const offsetX = 70;
-    const offsetY = 20;
+export function drawSkillsChart(bestSkills) {
+    const container = document.getElementById("skills-chart");
 
-    const skills = Object.entries(bestSkills);
-    const maxValue = Math.max(...skills.map(skill => skill[1]));
+    Object.entries(bestSkills).forEach(([name, value]) => {
 
-    const points = [];
+        const skill = document.createElement("div");
+        skill.classList.add("skill");
 
-    skills.forEach(([name, value], index) => {
+        const label = document.createElement("span");
+        label.textContent = name.replace("skill_", "");
 
-        const x =
-            offsetX +
-            (index / (skills.length - 1)) * width;
+        const barContainer = document.createElement("div");
+        barContainer.classList.add("skill-bar");
 
-        const y =
-            offsetY +
-            height -
-            (value / maxValue) * height;
+        const bar = document.createElement("div");
+        bar.classList.add("skill-value");
 
-        points.push({
-            x,
-            y,
-            name,
-            value
-        });
-    });
+        bar.style.width = value + "%";
 
-    return {
-        points,
-        maxValue
-    };
-}
+        const number = document.createElement("span");
+        number.textContent = value;
 
-export function drawSkillsGraph(points) {
-    const svg = document.getElementById("skills-graph");
+        barContainer.appendChild(bar);
+        barContainer.appendChild(number);
 
-    const pointsString = points
-        .map(point => `${point.x},${point.y}`)
-        .join(" ");
+        skill.appendChild(label);
+        skill.appendChild(barContainer);
 
-    const polyline = document.createElementNS(
-        "http://www.w3.org/2000/svg",
-        "polyline"
-    );
-
-    polyline.setAttribute("points", pointsString);
-    polyline.setAttribute("fill", "none");
-    polyline.setAttribute("stroke", "#4f46e5");
-    polyline.setAttribute("stroke-width", "3");
-
-    svg.appendChild(polyline);
-}
-
-export function drawSkillLabels(points) {
-    const svg = document.getElementById("skills-graph");
-
-    points.forEach(point => {
-        const text = document.createElementNS(
-            "http://www.w3.org/2000/svg",
-            "text"
-        );
-
-        text.setAttribute("x", point.x);
-        text.setAttribute("y", 325);
-
-        text.setAttribute("font-size", "11");
-        text.setAttribute("text-anchor", "middle");
-
-        // skill_prog -> prog
-        const name = point.name.replace("skill_", "");
-
-        text.textContent = name;
-
-        svg.appendChild(text);
+        container.appendChild(skill);
     });
 }
