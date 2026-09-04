@@ -3,42 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zone01- Profile</title>
-     <link rel="stylesheet" href="css/login.css">
+    <title>Zone01 - GraphQL Profile</title>
+    <link rel="stylesheet" href="./css/style.css"> <!-- تقدر تجمع الـ CSS هنا -->
 </head>
 <body>
 
-<div class="login-container">
+    <!-- قسم تسجيل الدخول -->
+    <div id="login-section" class="login-container">
+        <h1>GraphQL Profile</h1>
+        <form id="login-form">
+            <label for="identifier">Username or Email</label>
+            <input id="identifier" type="text" placeholder="Username or Email">
+            
+            <label for="password">Password</label>
+            <input id="password" type="password" placeholder="Password">
+            
+            <button type="submit">Sign In</button>
+            <p id="error-message"></p>
+        </form>
+    </div>
 
-    <h1>GraphQL Profile</h1>
+    <!-- قسم البروفايل (غادي يكون مخفي في الأول) -->
+    <div id="profile-section" class="dashboard hidden">
+        <!-- هنا غتحط داكشي ديال الـ Layout لي قادينا في الرسالة السابقة -->
+        
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">Zone01-GraphQL</div>
+            <div class="online-status"><span class="dot"></span> online</div>
+            <button id="logout-btn">Sign Out</button>
+        </header>
 
-    <form id="login-form">
+        <!-- Main Layout (Sidebar + Content) -->
+        <div class="main-container">
+            
+            <!-- Left Sidebar -->
+            <aside class="sidebar">
+                <div class="avatar-section" id="avatar-container">
+                    <!-- Avatar will be injected here -->
+                </div>
+                <div class="user-info" id="user-info-container">
+                    <!-- User info (username, cohort, etc.) will be injected here -->
+                </div>
+            </aside>
 
-        <label for="identifier">Username or Email</label>
-        <input
-            id="identifier"
-            type="text"
-            placeholder="Username or Email"
-        >
+            <!-- Right Content -->
+            <main class="content">
+                
+                <!-- Statistics Cards -->
+                <div class="stats-row" id="stats-container">
+                    <div class="stat-card" id="audit-card">...</div>
+                    <div class="stat-card" id="xp-card">...</div>
+                    <div class="stat-card" id="level-card">...</div>
+                </div>
 
-        <label for="password">Password</label>
-        <input
-            id="password"
-            type="password"
-            placeholder="Password"
-        >
+                <!-- Graphs Section -->
+                <div class="graphs-row">
+                    <div class="graph-card exp-graph">
+                        <h3>EXP over time</h3>
+                        <svg id="xp-graph" viewBox="0 0 700 350" preserveAspectRatio="none" style="width: 100%; height: 100%; min-height: 250px;"></svg>
+                    </div>
+                    
+                    <div class="graph-card skills-graph">
+                        <h3>Skills</h3>
+                        <div id="skills-chart"></div>
+                    </div>
+                </div>
+                
+            </main>
+        </div>
 
-        <button type="submit">
-            Sign In
-        </button>
-
-        <p id="error-message"></p>
-
-    </form>
-
-</div>
-
-<script type="module" src="./js/login.js"></script>
-
+    <script type="module" src="./js/main.js"></script>
 </body>
 </html>

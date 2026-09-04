@@ -1,7 +1,7 @@
+import { checkAuth } from "./main.js"; 
+
 export function logout() {
-
     localStorage.removeItem("token");
-
-    window.location.href = "index.html";
-
+    
+    checkAuth(); 
 }

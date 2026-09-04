@@ -1,4 +1,5 @@
 import { login } from "./auth.js";
+import { checkAuth } from "./main.js"; 
 
 export function renderLogin() {
     const form = document.getElementById("login-form");
@@ -15,16 +16,12 @@ export function renderLogin() {
 
         if (result.status === 200) {
             localStorage.setItem("token", result.token);
-
-            console.log("Login successful");
-            console.log("locl",localStorage.getItem("token"));
-            window.location.href = "profile.html";
+            
+            checkAuth(); 
 
         } else {
             const errBox = document.getElementById("error-message");
-
             errBox.textContent = "Invalid credentials";
-
             setTimeout(() => {
                 errBox.textContent = "";
             }, 2000);
@@ -33,4 +30,3 @@ export function renderLogin() {
 }
 
 renderLogin();
-//

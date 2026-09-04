@@ -1,6 +1,5 @@
 import { graphqlRequest } from "./api.js";
 import { logout } from "./logout.js";
-import { isAuthenticated } from "./auth.js";
 import {
     cumulativeXP,
     calculatePoints,
@@ -13,11 +12,8 @@ import {
     drawSkillsChart
 } from "./graph.js";
 
-async function renderProfile() {
+export async function renderProfile() {
 
-if (!isAuthenticated()) {
-    window.location.href = "index.html";
-}
     const result = await graphqlRequest(`
 
 
@@ -111,56 +107,30 @@ if (!isAuthenticated()) {
     const transactions = result.data.transactions;
     
     
-    document.getElementById("profile").innerHTML = `
-    <div class="profile-header">
-    
-    <img src="${avatar}" alt="Profile Picture" class="avatar">
-    
-    <div>
-    <h2>Welcome back,</h2>
-    <h1>${user.login}</h1>
-    <p>${cohort}</p>
-    </div>
-    
-    </div>
-    
-    <div class="cards">
-    
-    <div class="card">
-    <h3>Audit Ratio</h3>
-    <span>${auditRatio.toFixed(1)}</span>
-    </div>
-    
-    <div class="card">
-    <h3>Total XP</h3>
-    <span>${formatXP(totalXP)}</span>
-    </div>
-    
-    <div class="card">
-    <h3>Level</h3>
-    <span>${level}</span>
-    </div>
-    
-    </div>
-    
-    <div class="graphs">
-    
-    <div class="graph-card">
-    
-    
-    <h2>XP Progress</h2>
-    
-    <svg id="xp-graph" width="700" height="350"></svg>
+    document.getElementById("avatar-container").innerHTML = `
+        <img src="${avatar}" alt="Profile Picture" class="avatar">
+    `;
 
-    </div>
-    
-    <div class="graph-card skills-card">
-      <h2>Skills</h2>
+      
+    document.getElementById("user-info-container").innerHTML = `
+        <h2>Welcome back,</h2>
+        <h1>${user.login}</h1>
+        <p>${cohort}</p>
+    `;
 
-      <div id="skills-chart"></div>
-    </div>
+    document.getElementById("audit-card").innerHTML = `
+        <h3>Audit Ratio</h3>
+        <span>${auditRatio.toFixed(1)}</span>
+    `;
     
-    </div>
+    document.getElementById("xp-card").innerHTML = `
+        <h3>Total XP</h3>
+        <span>${formatXP(totalXP)}</span>
+    `;
+    
+    document.getElementById("level-card").innerHTML = `
+        <h3>Level</h3>
+        <span>${level}</span>
     `;
     
     const xp = cumulativeXP(transactions);
@@ -171,6 +141,9 @@ if (!isAuthenticated()) {
     const maxXP = graphData.maxXP;
     
     const pointsString = pointsToString(points);
+    
+    document.getElementById("xp-graph").innerHTML = "";
+    document.getElementById("skills-chart").innerHTML = "";
     
     drawAxes();
     drawYLabels(maxXP);
