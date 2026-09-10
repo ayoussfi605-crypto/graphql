@@ -9,10 +9,9 @@
 
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    /* حيدنا لون الخلفية من body وغادي نعطيوه لكل قسم بوحدو باش مايوقعش تضارب */
 }
 
-/* هاد الكلاس هو باش كنخفيو الصفحات */
+/* الكلاس الخاص بإخفاء الصفحات لـ SPA */
 .hidden {
     display: none !important;
 }
@@ -29,28 +28,30 @@ body {
     min-height: 100vh;
 }
 
-.login-container {
+.login-container form {
     width: 100%;
     max-width: 400px;
     background: white;
     padding: 40px;
     border-radius: 12px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-}
-
-.login-container h1 {
-    text-align: center;
-    margin-bottom: 30px;
-    color: #222;
-}
-
-#login-form {
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
-#login-form input {
+.login-container h1 {
+    text-align: center;
+    margin-bottom: 10px;
+    color: #222;
+}
+
+.login-container label {
+    font-weight: 500;
+    color: #374151;
+}
+
+.login-container input {
     padding: 14px;
     border: 1px solid #d9d9d9;
     border-radius: 8px;
@@ -59,11 +60,11 @@ body {
     transition: 0.3s;
 }
 
-#login-form input:focus {
+.login-container input:focus {
     border-color: #2563eb;
 }
 
-#login-form button {
+.login-container button {
     padding: 14px;
     border: none;
     border-radius: 8px;
@@ -75,97 +76,52 @@ body {
     transition: 0.3s;
 }
 
-#login-form button:hover {
+.login-container button:hover {
     background-color: #1d4ed8;
 }
 
 #error-message {
-    min-height: 20px;
     color: #dc2626;
     text-align: center;
     font-size: 14px;
+    min-height: 20px;
 }
 
 
 /* =========================================================
-   3. قسم البروفايل (Profile Section) - الهيكلة العامة
+   3. قسم البروفايل (Profile Section) - تطبيق الألوان الفخمة
 ========================================================= */
 #profile-section {
-    background-color: #0b0f19;
-    color: white;
+    background-color: #000000; /* الخلفية السوداء */
+    color: #E1DCC9; /* لون النصوص الكريمي */
+    width: 100%;
     min-height: 100vh;
-    padding: 20px;
+    padding: 20px 0;
     display: flex;
     flex-direction: column;
 }
 
 .dashboard {
-    width: 100%;
-    /* حيدنا max-width: 1200px باش يشد العرض كامل */
-    flex: 1; /* باش ياخد الطول ديال الشاشة كامل */
+    width: 80%; /* الكونتينيير الداخلي 80% */
+    margin: 0 auto;
+    flex: 1;
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
-
-/* التقسيم ديال السايدبار والمحتوى */
-.main-container {
-    display: grid;
-    grid-template-columns: 280px 1fr; /* السايدبار فيه 280px والباقي للمحتوى */
-    gap: 20px;
-    flex: 1; /* كيتمدد باش يعمر الفراغ اللي لتحت */
-}
-
-/* السايدبار (Left) - جمعنا الصورة والمعلومات في عمود واحد متصل بحال الصورة */
-.sidebar {
-    background: #1e293b;
-    border-radius: 12px;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 30px; /* مسافة بين الصورة والمعلومات */
-    border: 1px solid #1b2338;
-}
-
-/* المحتوى (Right) */
-.content {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.stats-row {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-}
-
-.graphs-row {
-    display: grid;
-    /* عطينا لـ EXP مساحة كبر شوية من Skills بحال اللي في الديزاين ديالك */
-    grid-template-columns: 1.5fr 1fr; 
-    gap: 20px;
-    flex: 1; /* كيتمدد باش يعمر الطول ديال الصفحة */
-}
-
-
-/* =========================================================
-   4. قسم البروفايل (Profile Section) - العناصر (Components)
-========================================================= */
 
 /* Header */
 header.header {
-    border: 1px solid #1b2338;
-    background: #1e293b;
+    border: 1px solid #412D15; /* إطار بالبني الفاتح */
+    background: #1F150C; /* لون الخلفية بني داكن جداً */
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 15px 30px;
     border-radius: 12px;
-    color: #fff;
 }
 
-/* Logout Button style in header */
+/* Logout Button */
 #logout-btn {
     padding: 8px 16px;
     background-color: #dc2626;
@@ -181,7 +137,7 @@ header.header {
 /* Status (Online) */
 .header .online-status {
     position: relative;
-    margin-right: 20px; /* باش نبعدوها على زر الخروج شوية */
+    margin-right: 20px;
 }
 
 .header .online-status::before {
@@ -209,7 +165,25 @@ header.header {
     animation: hover 1.8s ease-in-out both alternate infinite;
 }
 
-/* Avatar Section */
+/* Main Layout (Sidebar + Content) */
+.main-container {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 20px;
+    flex: 1;
+}
+
+/* Sidebar (Left) */
+.sidebar {
+    background: #1F150C;
+    border: 1px solid #412D15;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
 .avatar-section, .user-info {
     background: transparent;
     border: none;
@@ -221,23 +195,32 @@ header.header {
     height: 120px;
     border-radius: 50%;
     object-fit: cover;
-    border: 3px solid #4f46e5;
+    border: 3px solid #412D15; /* إطار الصورة */
 }
 
 /* User Info Section */
-.user-info {
-    background: #1e293b;
-    border-radius: 12px;
-    padding: 20px;
+.user-info h2 { color: #a39c87; font-weight: 400; font-size: 16px; }
+.user-info h1 { color: #E1DCC9; font-size: 32px; margin: 10px 0; }
+.user-info p { color: #a39c87; }
+
+/* Content (Right) */
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
-.user-info h2 { color: #9ca3af; font-weight: 400; font-size: 16px; }
-.user-info h1 { color: #bbd6df; font-size: 32px; margin: 10px 0; }
-.user-info p { color: #9ca3af; }
+/* Stats Row */
+.stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
 
-/* Cards (Statistics) */
+/* Stats Cards */
 .stat-card {
-    background: #1e293b;
+    background: #1F150C;
+    border: 1px solid #412D15;
     border-radius: 12px;
     padding: 20px;
 }
@@ -251,72 +234,41 @@ header.header {
 .stat-card span {
     font-size: 36px;
     font-weight: bold;
-    color: white;
+    color: #E1DCC9; /* لون النص الكريمي */
 }
 
 /* Graph Cards */
 .graph-card {
-    background: white; 
+    background: #1F150C; /* لون الخلفية البني الداكن جداً للرسوم */
+    border: 1px solid #412D15;
     padding: 20px;
     border-radius: 12px;
-    box-shadow: 0 5px 20px rgba(0,0,0,.1);
-    color: #333;
+    color: #E1DCC9; /* لون النص الكريمي */
     display: flex;
     flex-direction: column;
-}
-
-.graph-card svg {
-    flex: 1;
 }
 
 .graph-card h3 {
     margin-bottom: 20px;
+    color: #E1DCC9;
 }
 
-/* Skills Chart */
-#skills-chart {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.skill {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.skill > span {
-    width: 100px;
-    color: #374151;
-    font-weight: 500;
-}
-
-.skill-bar {
-    position: relative;
+/* Graphs Row */
+.graphs-row {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 20px;
     flex: 1;
-    height: 25px;
-    background: #e5e7eb;
-    border-radius: 6px;
-    overflow: hidden;
 }
 
-.skill-value {
-    height: 100%;
-    background: #4f46e5;
-    border-radius: 6px;
+/* تحسين الـ SVG داخل البطاقة */
+.graph-card svg {
+    flex: 1;
 }
 
-.skill-bar > span {
-    position: absolute;
-    right: 8px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: white;
-    font-size: 12px;
-    font-weight: bold;
-}
-
+/* =========================================================
+   4. Animations
+========================================================= */
 @keyframes hover {
     0%,
     100% {
