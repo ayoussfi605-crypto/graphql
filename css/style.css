@@ -120,14 +120,21 @@ header.header {
     padding: 15px 30px;
     border-radius: 12px;
 }
-
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #a39c87; /* لون النص الكريمي */
+}
 /* Logout Button */
 #logout-btn {
     padding: 8px 16px;
-    background-color: #dc2626;
+    background-color: #646361;
     color: white;
     border: none;
-    border-radius: 6px;
+    border-radius: 10px;
     cursor: pointer;
     font-weight: bold;
     transition: 0.3s;
@@ -184,10 +191,24 @@ header.header {
     gap: 30px;
 }
 
-.avatar-section, .user-info {
+.avatar-section {
     background: transparent;
-    border: none;
-    padding: 0;
+    padding: 0 60px;
+}
+.user-info .usrnm {
+    color: #E1DCC9;
+    font-size: 17px;
+    font-style: italic;
+    font-weight: bold;
+    margin: 10px 0;
+}
+.user-info{
+    color: #daa813;
+    font-size: 17px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
 }
 
 .avatar {
@@ -195,7 +216,7 @@ header.header {
     height: 120px;
     border-radius: 50%;
     object-fit: cover;
-    border: 3px solid #412D15; /* إطار الصورة */
+    border: 3px solid #e5f0b5; /* إطار الصورة */
 }
 
 /* User Info Section */
@@ -235,6 +256,41 @@ header.header {
     font-size: 36px;
     font-weight: bold;
     color: #E1DCC9; /* لون النص الكريمي */
+}
+
+/* الكونتينيير الكبير اللي جامع كلشي */
+.stat-header {
+    display: flex;
+    justify-content: space-between; /* هادي هي اللي غتبعد الكلمة على الرقم لأقصى حد */
+    align-items: center; /* هادي كتخليهم مقادين فسطر واحد عمودياً */
+    width: 100%;
+}
+
+/* المجموعة اللي فيها الأيقونة والعنوان */
+.icon-title {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* المسافة بين الأيقونة والكلمة */
+}
+
+/* حيدنا الهامش من العنوان باش ما يهربش على الأيقونة */
+.icon-title h3 {
+    margin: 0;
+    font-size: 16px;
+    color: #a39c87; /* لون بيج غامق شوية */
+}
+
+/* ستايل ديال الرقم باش يجي باين */
+.stat-header > span {
+    font-size: 28px;
+    font-weight: bold;
+    color: #E1DCC9; /* لون كريمي فخم */
+}
+
+.stat-card h3 {
+    font-size: 16px;
+    color: #cbd5e1;
+    margin-bottom: 0; 
 }
 
 /* Graph Cards */

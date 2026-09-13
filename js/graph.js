@@ -14,26 +14,19 @@ export function cumulativeXP(transactions) {
 
 
 export function calculatePoints(xp) {
-    // العرض والطول الوهمي ديال viewBox
     const width = 610;
     const height = 300;
 
-    // حيدنا offsetX و offsetY باش الرسم يشد المساحة كاملة
-
-    // كنقلبو على أعلى نقطة باش نحددو الارتفاع
     const maxXP = Math.max(...xp);
 
     const points = [];
 
-    // حماية باش ما يوقعش خطأ إذا كان المصفوفة خاوية أو فيها عنصر واحد
     if (xp.length === 0) return { points, maxXP: 0 };
     if (xp.length === 1) return { points: [{ x: width / 2, y: height / 2 }], maxXP };
 
     xp.forEach((value, index) => {
-        // X كيبدا من 0 وكيسالي فـ 610 (أقصى اليمين)
         const x = (index / (xp.length - 1)) * width;
 
-        // Y كيبدا من التحت (300) وكيطلع على حساب النسبة ديال XP
         const y = height - ((value / maxXP) * height);
 
         points.push({ x, y });
@@ -57,24 +50,18 @@ export function pointsToString(points) {
 export function drawXPGraph(pointsString) {
     const svg = document.getElementById("xp-graph");
 
-    // ==========================================
-    // 1. رسم الشبكة الخلفية (Grid / الكارويات)
-    // ==========================================
     const gridGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    gridGroup.setAttribute("stroke", "#412D15"); // اللون البني الداكن ديالك
-    gridGroup.setAttribute("stroke-width", "0.5"); // خط رقيق
-    gridGroup.setAttribute("opacity", "0.5"); // شفاف شوية باش مايبرزطش العين
+    gridGroup.setAttribute("stroke", "#412D15"); 
+    gridGroup.setAttribute("stroke-width", "0.5");  
+    gridGroup.setAttribute("opacity", "0.5");
 
-    // رسم 6 خطوط أفقية وعمودية
     for(let i = 0; i <= 6; i++) {
-        // خطوط أفقية
         let y = i * (300 / 6);
         let hLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
         hLine.setAttribute("x1", "0"); hLine.setAttribute("y1", y);
         hLine.setAttribute("x2", "610"); hLine.setAttribute("y2", y);
         gridGroup.appendChild(hLine);
         
-        // خطوط عمودية
         let x = i * (610 / 6);
         let vLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
         vLine.setAttribute("x1", x); vLine.setAttribute("y1", "0");
@@ -84,49 +71,38 @@ export function drawXPGraph(pointsString) {
     svg.appendChild(gridGroup);
 
 
-    // ==========================================
-    // 2. رسم الظل المتدفق (Flow / Gradient Area)
-    // ==========================================
-    
-    // أ) تعريف التدرج اللوني (Gradient)
     const defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
     const gradient = document.createElementNS("http://www.w3.org/2000/svg", "linearGradient");
     gradient.setAttribute("id", "flow-gradient");
     gradient.setAttribute("x1", "0%"); gradient.setAttribute("y1", "0%");
-    gradient.setAttribute("x2", "0%"); gradient.setAttribute("y2", "100%"); // التدرج غادي من الفوق لتحت
+    gradient.setAttribute("x2", "0%"); gradient.setAttribute("y2", "100%"); 
     
     const stop1 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
     stop1.setAttribute("offset", "0%");
-    stop1.setAttribute("stop-color", "#E1DCC9"); // اللون الكريمي
-    stop1.setAttribute("stop-opacity", "0.5"); // شفافية خفيفة الفوق
+    stop1.setAttribute("stop-color", "#E1DCC9"); 
+    stop1.setAttribute("stop-opacity", "0.5"); 
     
     const stop2 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
     stop2.setAttribute("offset", "100%");
-    stop2.setAttribute("stop-color", "#1F150C"); // كيذوب في لون الخلفية البني
-    stop2.setAttribute("stop-opacity", "0"); // شفاف كلياً لتحت
+    stop2.setAttribute("stop-color", "#1F150C"); 
+    stop2.setAttribute("stop-opacity", "0"); 
     
     gradient.appendChild(stop1); 
     gradient.appendChild(stop2);
     defs.appendChild(gradient);
     svg.appendChild(defs);
 
-    // ب) رسم المساحة المعبأة (Polygon)
     const polygon = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
-    // كنزيدو نقطة في الأسفل يسار (0,300) ونقطة في الأسفل يمين (610,300) باش نسدو الشكل تحت الخط
     const areaPoints = `0,300 ${pointsString} 610,300`;
     polygon.setAttribute("points", areaPoints);
     polygon.setAttribute("fill", "url(#flow-gradient)");
     svg.appendChild(polygon);
 
 
-    // ==========================================
-    // 3. رسم الخط الرئيسي (Main Line)
-    // ==========================================
-    // الخط كيتكتب هو اللخر باش يجي باين الفوق وميغطيهش الظل
     const polyline = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
     polyline.setAttribute("points", pointsString);
     polyline.setAttribute("fill", "none");
-    polyline.setAttribute("stroke", "#E1DCC9"); // اللون الكريمي الفخم
+    polyline.setAttribute("stroke", "#E1DCC9"); 
     polyline.setAttribute("stroke-width", "3"); 
     
     svg.appendChild(polyline);
@@ -152,10 +128,10 @@ export function drawPoints(points) {
 
             circle.setAttribute("cx", point.x);
             circle.setAttribute("cy", point.y);
-            circle.setAttribute("r", "4");
-            circle.setAttribute("fill", "#1F150C");
+            circle.setAttribute("r", "3");
+            circle.setAttribute("fill", "#000000");
             circle.setAttribute("stroke", "#E1DCC9");  
-            circle.setAttribute("stroke-width", "2");
+            circle.setAttribute("stroke-width", "1");
 
             svg.appendChild(circle);
         }
@@ -167,20 +143,18 @@ export function drawPoints(points) {
 export function drawAxes() {
     const svg = document.getElementById("xp-graph");
 
-    // 1. محور Y (الخط العمودي ديال L - على اليسار)
     const yAxis = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    yAxis.setAttribute("x1", "0"); // لاصق فاقصى اليسار
+    yAxis.setAttribute("x1", "0"); 
     yAxis.setAttribute("y1", "0");
     yAxis.setAttribute("x2", "0");
-    yAxis.setAttribute("y2", "300"); // هابط تال القاع
-    yAxis.setAttribute("stroke", "#412D15"); // لون الإطار
-    yAxis.setAttribute("stroke-width", "3"); // غلضناه شوية باش يبرز على الكارويات
+    yAxis.setAttribute("y2", "300"); 
+    yAxis.setAttribute("stroke", "#412D15"); 
+    yAxis.setAttribute("stroke-width", "3"); 
 
-    // 2. محور X (الخط الأفقي ديال L - لتحت)
     const xAxis = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    xAxis.setAttribute("x1", "0"); // بادي من القنت ديال اليسار
-    xAxis.setAttribute("y1", "300"); // لاصق فالقاع
-    xAxis.setAttribute("x2", "610"); // غادي تال اللخر ديال الكارويات فاليمن
+    xAxis.setAttribute("x1", "0"); 
+    xAxis.setAttribute("y1", "300"); 
+    xAxis.setAttribute("x2", "610"); 
     xAxis.setAttribute("y2", "300");
     xAxis.setAttribute("stroke", "#412D15");
     xAxis.setAttribute("stroke-width", "3");
@@ -192,7 +166,7 @@ export function drawAxes() {
 export function drawYLabels(maxXP) {
     const svg = document.getElementById("xp-graph");
     const height = 300;
-    const steps = 6; // 6 أقسام باش يجيو لاصقين مع الكارويات
+    const steps = 6; 
 
     for (let i = 0; i <= steps; i++) {
         const value = maxXP - (i * (maxXP / steps));
@@ -200,14 +174,14 @@ export function drawYLabels(maxXP) {
 
         const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
         
-        text.setAttribute("x", "-15"); // كنبعدوه شوية على اليسار باش ما يدخلش فالكارو
+        text.setAttribute("x", "-15"); 
         text.setAttribute("y", y);
-        text.setAttribute("dy", "4"); // توسيط خفيف مع الخط
-        text.setAttribute("text-anchor", "end"); // باش الأرقام يتقادو من جهة اليمين
+        text.setAttribute("dy", "4"); 
+        text.setAttribute("text-anchor", "end"); 
         text.setAttribute("font-size", "12");
-        text.setAttribute("fill", "#a39c87"); // اللون اللي اختاريتي
+        text.setAttribute("fill", "#a39c87"); 
 
-        text.textContent = formatGraphXP(value); // الدالة ديالك بقات كيما هي
+        text.textContent = formatGraphXP(value); 
 
         svg.appendChild(text);
     }
@@ -216,11 +190,11 @@ export function drawYLabels(maxXP) {
 function formatGraphXP(xp) {
 
     if (xp >= 1000000) {
-        return (xp / 1000000).toFixed(1) + " MB";
+        return (xp / 1000000).toFixed(0) + " MB";
     }
 
     if (xp >= 1000) {
-        return (xp / 1000).toFixed(1) + " kB";
+        return (xp / 1000).toFixed(0) + " kB";
     }
 
     return Math.round(xp) + " B";
@@ -231,15 +205,13 @@ export function drawXLabels(transactions) {
     const svg = document.getElementById("xp-graph");
     const width = 610;
     const height = 300;
-    const steps = 6; // 6 أقسام للتواريخ
+    const steps = 6; 
 
-    // كنجبدو أول وأخر تاريخ باش نوزعوهم بالتساوي
     const minDate = new Date(transactions[0].createdAt).getTime();
     const maxDate = new Date(transactions[transactions.length - 1].createdAt).getTime();
     const timeRange = maxDate - minDate || 1;
 
     for (let i = 0; i <= steps; i++) {
-        // حيدنا offsetX باش يبدا من 0 ويسالي فـ 610
         const x = i * (width / steps); 
         
         const currentTime = minDate + (i * (timeRange / steps));
@@ -249,7 +221,7 @@ export function drawXLabels(transactions) {
         const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
         
         text.setAttribute("x", x);
-        text.setAttribute("y", height + 25); // هبطناه تحت الكارويات
+        text.setAttribute("y", height + 25); 
         text.setAttribute("font-size", "12");
         text.setAttribute("fill", "#a39c87");
         text.setAttribute("text-anchor", "middle");
@@ -262,21 +234,56 @@ export function drawXLabels(transactions) {
 
 
 export function drawSkillsChart(bestSkills) {
-    const container = document.getElementById("skills-chart");
-    container.innerHTML = ""; // كنمسحو أي حاجة قديمة باش مايتعاودش الرسم
+    const svg = document.getElementById("skills-chart");
+    svg.innerHTML = ""; 
 
-    // 1. كنكرييو عنصر SVG (ضروري نخدمو بـ createElementNS مع الرابط ديال SVG)
-    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    const totalSkills = Object.keys(bestSkills).length;
+    const svgHeight = totalSkills * 40; 
     
-    // 2. كنعطيو أبعاد وهمية للرسم باش يجي Responsive
-    // العرض 500، والطول غنحسبوه على حساب شحال من مهارة عندنا (مثلاً 400)
-    svg.setAttribute("viewBox", "0 0 500 400");
-    svg.style.width = "100%";
+    
+    svg.setAttribute("viewBox", `0 0 500 ${svgHeight}`);
 
-    // ===> هنا غادي يجي الكود ديال الحلقة (Loop) باش نرسمو الأعمدة <===
+    
     Object.entries(bestSkills).forEach(([name, value], index) => {
+        const yPosition = index * 40; 
+
+
+        const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        label.setAttribute("x", "0"); 
+        label.setAttribute("y", yPosition + 15); 
+        label.setAttribute("fill", "#cccbc7"); 
+        label.setAttribute("font-size", "16px");
+        label.textContent = name.replace("skill_", "");
+        svg.appendChild(label);
+
+        const bgRect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        bgRect.setAttribute("x", "100"); 
+        bgRect.setAttribute("y", yPosition);
+        bgRect.setAttribute("width", "350"); 
+        bgRect.setAttribute("height", "22");
+        bgRect.setAttribute("fill", "#1F150C"); 
+        bgRect.setAttribute("rx", "5");
+        svg.appendChild(bgRect);
+
+        const valueRect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        valueRect.setAttribute("x", "100");
+        valueRect.setAttribute("y", yPosition);
+        const barWidth = (value / 100) * 350; 
+        valueRect.setAttribute("width", barWidth); 
+        valueRect.setAttribute("height", "22");
+        valueRect.setAttribute("fill", "#e7d59e"); 
+        valueRect.setAttribute("rx", "5");
+        svg.appendChild(valueRect);
+
+        const percentText = document.createElementNS("http://www.w3.org/2000/svg", "text");
         
+        percentText.setAttribute("x", "460"); 
+        percentText.setAttribute("y", yPosition + 16); 
+        percentText.setAttribute("fill", "#e7d59e"); 
+        percentText.setAttribute("font-size", "13px");
+        percentText.setAttribute("font-weight", "bold");
+        percentText.setAttribute("text-anchor", "start"); 
+        percentText.textContent = value + "%";
+        svg.appendChild(percentText);
     });
-    // 3. كنلوحو الـ SVG كامل وسط الـ div ديالنا في HTML
-    container.appendChild(svg);
 }
