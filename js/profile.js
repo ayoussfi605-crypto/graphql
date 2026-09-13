@@ -98,8 +98,7 @@ export async function renderProfile() {
   
 `);
 
-const firstName = result.data.user[0].firstName;
-console.log(firstName);
+    const firstName = result.data.user[0].firstName;
     const lastName = result.data.user[0].lastName;
     const email = result.data.user[0].email;
     const login = result.data.user[0].login;
@@ -122,12 +121,12 @@ console.log(firstName);
 
     document.getElementById("user-info-container").innerHTML = `
         <p class="usrnm">Welcome back, ${login}</p>
-        <p>email: ${email}</p>
-        <p>firstName: ${firstName}</p>
-        <p>lastName: ${lastName}</p>
-        <p>level: ${level}</p>
-        <p>totalXP: ${formatXP(totalXP)}</p>
-        <p>cohort: ${cohort}</p>
+        <p>Email: ${email}</p>
+        <p>First Name: ${firstName}</p>
+        <p>Last Name: ${lastName}</p>
+        <p>Level: ${level}</p>
+        <p>Total XP: ${formatXP(totalXP)}</p>
+        <p>Cohort: ${cohort}</p>
     `;
 
 // بطاقة Audit Ratio

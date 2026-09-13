@@ -261,7 +261,7 @@ export function drawSkillsChart(bestSkills) {
         bgRect.setAttribute("y", yPosition);
         bgRect.setAttribute("width", "350"); 
         bgRect.setAttribute("height", "22");
-        bgRect.setAttribute("fill", "#1F150C"); 
+        bgRect.setAttribute("fill", "#22201f"); 
         bgRect.setAttribute("rx", "5");
         svg.appendChild(bgRect);
 
