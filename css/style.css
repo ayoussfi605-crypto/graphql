@@ -386,6 +386,142 @@ header.header {
     flex: 1;
 }
 
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+/* ---------- Tablets (≤1024px) ---------- */
+@media (max-width: 1024px) {
+    .dashboard {
+        width: 92%;
+    }
+
+    .main-container {
+        grid-template-columns: 220px 1fr;
+        gap: 15px;
+    }
+
+    .avatar-section {
+        padding: 0 20px;
+    }
+
+    .graphs-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ---------- Small tablets / large phones (≤768px) ---------- */
+@media (max-width: 768px) {
+    .dashboard {
+        width: 100%;
+        padding: 0 15px;
+    }
+
+    header.header {
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 12px 15px;
+    }
+
+    /* sidebar fo9 l content, machi jiha */
+    .main-container {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        padding: 15px;
+    }
+
+    .avatar-section {
+        padding: 0;
+    }
+
+    .avatar {
+        width: 80px;
+        height: 80px;
+    }
+
+    .user-info {
+        text-align: left;
+        gap: 4px;
+    }
+
+    .user-info h1 {
+        font-size: 22px;
+    }
+
+    .stats-row {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+
+    /* login card */
+    .login-container,
+    #login-section {
+        max-width: 90%;
+        padding: 30px 25px;
+    }
+}
+
+/* ---------- Phones (≤480px) ---------- */
+@media (max-width: 480px) {
+    #profile-section {
+        padding: 12px 0;
+    }
+
+    header.header {
+        justify-content: center;
+        text-align: center;
+    }
+
+    .logo {
+        font-size: 17px;
+    }
+
+    #logout-btn {
+        padding: 6px 12px;
+        font-size: 13px;
+    }
+
+    .stats-row {
+        grid-template-columns: 1fr;
+    }
+
+    .stat-card span {
+        font-size: 28px;
+    }
+
+    .graph-card {
+        padding: 15px;
+    }
+
+    .avatar {
+        width: 70px;
+        height: 70px;
+    }
+
+    .user-info h1 {
+        font-size: 20px;
+    }
+
+    /* login */
+    .login-container,
+    #login-section {
+        padding: 25px 18px;
+        border-radius: 12px;
+    }
+
+    #login-form input,
+    #login-form button {
+        padding: 12px 14px;
+        font-size: 14px;
+    }
+}
 
 /* Animations */
 @keyframes hover {

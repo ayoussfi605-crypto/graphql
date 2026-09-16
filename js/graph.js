@@ -1,18 +1,20 @@
+// results in an array of cumulative XP values like this:
+// [100, 300, 600]
 export function cumulativeXP(transactions) {
 
     let total = 0;
 
     return transactions.map(transaction => {
-
+        
         total += transaction.amount;
-
         return total;
-
+        
     });
 
 }
 
-
+// calculate the points for the graph based on the cumulative XP values
+//convert the cumulative XP values into points for the graph x and y coordinates
 export function calculatePoints(xp) {
     const width = 610;
     const height = 300;
@@ -20,18 +22,19 @@ export function calculatePoints(xp) {
     const maxXP = Math.max(...xp);
 
     const points = [];
-
+    // Handle edge cases for empty or single-point data
     if (xp.length === 0) return { points, maxXP: 0 };
+    // If there's only one point, place it in the middle of the graph
     if (xp.length === 1) return { points: [{ x: width / 2, y: height / 2 }], maxXP };
 
     xp.forEach((value, index) => {
+        // Calculate the x and y coordinates for each point based on the index and value
         const x = (index / (xp.length - 1)) * width;
-
         const y = height - ((value / maxXP) * height);
 
         points.push({ x, y });
     });
-
+    
     return {
         points,
         maxXP

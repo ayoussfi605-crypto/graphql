@@ -88,10 +88,10 @@ query fetchMyDashboard {
     
     const totalXP = result.data.xpAggr.aggregate.sum.amount;
     const level = result.data.levelAggr.aggregate.max.amount;
-    
     const skills = result.data.skillList;
+    // Get the best skills from the list of skills
     const bestSkills = getBestSkills(skills);
-    
+    // Get the transactions for the XP graph
     const transactions = result.data.xpProgress;
     
     document.getElementById("avatar-container").innerHTML = `
@@ -107,7 +107,7 @@ query fetchMyDashboard {
         <p>Address (Region): ${addressRegion}</p>
         <p>Address (Street): ${addressStreet}</p>
     `;
-// بطاقة Audit Ratio
+    // Audit Ratio
     document.getElementById("audit-card").innerHTML = `
         <div class="stat-header">
             <div class="icon-title">
@@ -120,7 +120,7 @@ query fetchMyDashboard {
         </div>
     `;
     
-    // بطاقة Total XP
+    // Total XP
     document.getElementById("xp-card").innerHTML = `
         <div class="stat-header">
             <div class="icon-title">
@@ -133,7 +133,7 @@ query fetchMyDashboard {
         </div>
     `;
     
-    // بطاقة Current Level
+    // Current Level
     document.getElementById("level-card").innerHTML = `
         <div class="stat-header">
             <div class="icon-title">
@@ -149,7 +149,7 @@ query fetchMyDashboard {
     document.getElementById("cohort").innerHTML = `
     <p>${cohort}</p>
   `;
-
+    // Get the cumulative XP from the transactions like this: [100, 300, 600]
     const xp = cumulativeXP(transactions);
     
     const graphData = calculatePoints(xp);
@@ -172,7 +172,7 @@ query fetchMyDashboard {
 
 document.getElementById("logout-btn").addEventListener("click", logout);
 
-
+// Function to format the XP value into a more readable format
 function formatXP(xp) {
     if (xp >= 1000000) {
         return (xp / 1000000).toFixed(0) + " MB";
@@ -185,15 +185,16 @@ function formatXP(xp) {
     return xp.toFixed(0) + " B";
 }
 
-
+// Function to get the best skills from the list of skills
 function getBestSkills(skills) {
     const best = {};
     skills.forEach(skill => {
-
+      // Check if the skill type is not already in the best object or if the current skill amount is greater than the existing one
         if(
             !best[skill.type] ||
             skill.amount > best[skill.type]
         ){
+
             best[skill.type] = skill.amount;
         }
 
