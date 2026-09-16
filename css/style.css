@@ -1,114 +1,131 @@
-/* =========================================================
-   1. الإعدادات العامة (Reset & Utilities)
-========================================================= */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+html, body {
+    height: 100%;
+    margin: 0;
 }
 
-/* الكلاس الخاص بإخفاء الصفحات لـ SPA */
+body {
+    background-color: #0b0806;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .hidden {
     display: none !important;
 }
 
-
-/* =========================================================
-   2. قسم تسجيل الدخول (Login Section)
-========================================================= */
-/* =========================================================
-   تصميم صفحة تسجيل الدخول (Sign In) - Dark/Earthy Theme
-========================================================= */
+/* (Sign In) - Dark/Earthy Theme */
 #login-section {
-    background-color: #0b0806; /* نفس الخلفية الغامقة ديال البروفايل */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-}
-
-.login-container {
+    position: relative;
     width: 100%;
     max-width: 400px;
-    background: #1F150C; /* البني الداكن */
-    padding: 40px;
-    border-radius: 12px;
-    border: 1px solid #a39c87; /* إطار بيج/ذهبي فخم */
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    background: linear-gradient(160deg, #24190e 0%, #1a1108 100%);
+    padding: 45px 40px;
+    border-radius: 16px;
+    border: 1px solid #3a2c1a;
+    box-shadow:
+        0 20px 50px rgba(0, 0, 0, 0.6),
+        0 0 0 1px rgba(163, 156, 135, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    overflow: hidden;
+}
+#login-section::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #daa813, transparent);
+}
+
+/* thin glowing top accent line */
+.login-container::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #daa813, transparent);
 }
 
 .login-container h1 {
     text-align: center;
-    margin-bottom: 30px;
-    color: #E1DCC9; /* لون كريمي للنص */
+    margin-bottom: 35px;
+    color: #E1DCC9;
+    font-size: 24px;
+    letter-spacing: 0.5px;
 }
 
 #login-form {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 22px;
 }
 
 #login-form label {
-    color: #a39c87; /* لون العناوين ديال input */
-    font-size: 14px;
-    margin-bottom: -10px;
+    color: #a39c87;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: -12px;
 }
 
 #login-form input {
-    padding: 14px;
-    background-color: #0b0806; /* خلفية الإدخال غامقة */
-    border: 1px solid #a39c87; /* حدود بيج */
-    color: #E1DCC9; /* لون الكتابة كريمي */
-    border-radius: 8px;
-    font-size: 16px;
+    padding: 14px 16px;
+    background-color: rgba(0, 0, 0, 0.35);
+    border: 1px solid #412D15;
+    color: #E1DCC9;
+    border-radius: 10px;
+    font-size: 15px;
     outline: none;
-    transition: 0.3s;
+    transition: 0.25s ease;
 }
 
 #login-form input::placeholder {
-    color: #7a7360; /* لون بيج باهت للبلايس هولدر */
+    color: #6b6350;
 }
 
 #login-form input:focus {
-    border-color: #E1DCC9; /* كيضوا الإطار ملي كتدخل تكتب */
-    box-shadow: 0 0 8px rgba(163, 156, 135, 0.3);
+    border-color: #daa813;
+    box-shadow: 0 0 0 3px rgba(218, 168, 19, 0.15);
 }
 
 #login-form button {
+    margin-top: 6px;
     padding: 14px;
     border: none;
-    border-radius: 8px;
-    background-color: #a39c87; /* لون الزر بيج/ذهبي */
-    color: #1F150C; /* لون النص بني داكن باش يبرز */
-    font-size: 16px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #daa813, #a3841a);
+    color: #1F150C;
+    font-size: 15px;
     font-weight: bold;
+    letter-spacing: 0.3px;
     cursor: pointer;
-    transition: 0.3s;
+    transition: 0.25s ease;
 }
 
 #login-form button:hover {
-    background-color: #E1DCC9; /* كيولي كريمي فاتح ملي كتدوز عليه الماوس */
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(218, 168, 19, 0.25);
 }
 
 #error-message {
     min-height: 20px;
-    color: #ef4444; /* أحمر باش يبان الخطأ واضح فوق الظلام */
+    color: #f87171;
     text-align: center;
-    font-size: 14px;
-    font-weight: bold;
+    font-size: 13px;
+    font-weight: 600;
 }
 
-/* =========================================================
-   3. قسم البروفايل (Profile Section) - تطبيق الألوان الفخمة
-========================================================= */
+/* (Profile Section)  */
 #profile-section {
-    background-color: #000000; /* الخلفية السوداء */
-    color: #E1DCC9; /* لون النصوص الكريمي */
+    background-color: #000000; 
+    color: #E1DCC9; 
     width: 100%;
     min-height: 100vh;
     padding: 20px 0;
@@ -117,7 +134,7 @@ body {
 }
 
 .dashboard {
-    width: 80%; /* الكونتينيير الداخلي 80% */
+    width: 80%; 
     margin: 0 auto;
     flex: 1;
     display: flex;
@@ -127,8 +144,8 @@ body {
 
 /* Header */
 header.header {
-    border: 1px solid #412D15; /* إطار بالبني الفاتح */
-    background: #1F150C; /* لون الخلفية بني داكن جداً */
+    border: 1px solid #412D15; 
+    background: #1F150C; 
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -141,7 +158,7 @@ header.header {
     gap: 10px;
     font-size: 20px;
     font-weight: bold;
-    color: #a39c87; /* لون النص الكريمي */
+    color: #a39c87; 
 }
 /* Logout Button */
 #logout-btn {
@@ -157,32 +174,35 @@ header.header {
 #logout-btn:hover { background-color: #b91c1c; }
 
 /* Status (Online) */
-.header .online-status {
+#cohort {
     position: relative;
     margin-right: 20px;
+    display: flex;
+    align-items: center;
 }
 
-.header .online-status::before {
+#cohort::before {
     content: "";
     position: absolute;
     top: 50%;
-    transform: translateY(-50%);
     left: -12px;
+    transform: translateY(-50%);
     width: 6px;
     height: 6px;
     background: rgb(43, 255, 0);
     border-radius: 50%;
+    z-index: 2;
 }
 
-.header .online-status::after {
+#cohort::after {
     content: "";
     position: absolute;
     top: 50%;
-    transform: translateY(-50%);
     left: -17px;
+    transform: translateY(-50%);
     width: 16px;
     height: 16px;
-    background: #0f03;
+    background: rgba(43, 255, 0, 0.2);
     border-radius: 50%;
     animation: hover 1.8s ease-in-out both alternate infinite;
 }
@@ -197,25 +217,30 @@ header.header {
 
 /* Sidebar (Left) */
 .sidebar {
-    background: #1F150C;
+    background: linear-gradient(160deg, #24190e 0%, #1a1108 100%);
     border: 1px solid #412D15;
-    border-radius: 12px;
-    padding: 20px;
+    border-radius: 16px;
+    padding: 35px 20px;
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    align-items: center;
+    gap: 22px;
+    word-break: break-word;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
 }
 
 .avatar-section {
     background: transparent;
-    padding: 0 60px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
 }
 .user-info .usrnm {
     color: #E1DCC9;
-    font-size: 17px;
+    font-size: 18px;
     font-style: italic;
     font-weight: bold;
-    margin: 10px 0;
+    margin: 0;
 }
 .user-info{
     color: #daa813;
@@ -227,18 +252,44 @@ header.header {
 }
 
 .avatar {
-    width: 120px;
-    height: 120px;
+    width: 110px;
+    height: 110px;
     border-radius: 50%;
     object-fit: cover;
-    border: 3px solid #e5f0b5; /* إطار الصورة */
+    border: 3px solid #daa813;
+    box-shadow: 0 0 0 4px rgba(218, 168, 19, 0.12), 0 8px 20px rgba(0, 0, 0, 0.5);
 }
 
 /* User Info Section */
-.user-info h2 { color: #a39c87; font-weight: 400; font-size: 16px; }
-.user-info h1 { color: #E1DCC9; font-size: 32px; margin: 10px 0; }
-.user-info p { color: #a39c87; }
 
+.user-info {
+    color: #daa813;
+    font-size: 17px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+    padding-top: 18px;
+    border-top: 1px solid #412D15;
+}
+.user-info h2 {
+    color: #a39c87;
+    font-weight: 400;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.user-info h1 {
+    color: #E1DCC9;
+    font-size: 30px;
+    margin: 4px 0;
+}
+
+.user-info p {
+    color: #a39c87;
+    font-size: 13px;
+}
 /* Content (Right) */
 .content {
     display: flex;
@@ -270,36 +321,35 @@ header.header {
 .stat-card span {
     font-size: 36px;
     font-weight: bold;
-    color: #E1DCC9; /* لون النص الكريمي */
+    color: #E1DCC9; 
 }
 
-/* الكونتينيير الكبير اللي جامع كلشي */
+
 .stat-header {
     display: flex;
-    justify-content: space-between; /* هادي هي اللي غتبعد الكلمة على الرقم لأقصى حد */
-    align-items: center; /* هادي كتخليهم مقادين فسطر واحد عمودياً */
+    justify-content: space-between; 
+    align-items: center; 
     width: 100%;
 }
 
-/* المجموعة اللي فيها الأيقونة والعنوان */
+
 .icon-title {
     display: flex;
     align-items: center;
-    gap: 10px; /* المسافة بين الأيقونة والكلمة */
+    gap: 10px; 
 }
 
-/* حيدنا الهامش من العنوان باش ما يهربش على الأيقونة */
 .icon-title h3 {
     margin: 0;
     font-size: 16px;
-    color: #a39c87; /* لون بيج غامق شوية */
+    color: #a39c87; 
 }
 
-/* ستايل ديال الرقم باش يجي باين */
+
 .stat-header > span {
     font-size: 28px;
     font-weight: bold;
-    color: #E1DCC9; /* لون كريمي فخم */
+    color: #E1DCC9; 
 }
 
 .stat-card h3 {
@@ -310,11 +360,11 @@ header.header {
 
 /* Graph Cards */
 .graph-card {
-    background: #1F150C; /* لون الخلفية البني الداكن جداً للرسوم */
+    background: #1F150C;
     border: 1px solid #412D15;
     padding: 20px;
     border-radius: 12px;
-    color: #E1DCC9; /* لون النص الكريمي */
+    color: #E1DCC9; 
     display: flex;
     flex-direction: column;
 }
@@ -332,14 +382,12 @@ header.header {
     flex: 1;
 }
 
-/* تحسين الـ SVG داخل البطاقة */
 .graph-card svg {
     flex: 1;
 }
 
-/* =========================================================
-   4. Animations
-========================================================= */
+
+/* Animations */
 @keyframes hover {
     0%,
     100% {

@@ -17,49 +17,42 @@ export async function renderProfile() {
     const result = await graphqlRequest(`
 
 
-{
-  user {
+query fetchMyDashboard {
+  student: user {
+    id
     login
-    email
     firstName
     lastName
-    avatarUrl
-    attrs
+    email
     auditRatio
-
-    cohort: events(
-      where: {
-        cohorts: {
-          labelName: {
-            _is_null: false
-          }
-        }
-      }
-    ) {
+    attrs
+    timeline: events(where: {cohorts: {labelName: {_is_null: false}}}) {
       cohorts {
         labelName
       }
     }
   }
-
-  totalXP: transaction_aggregate(
-    where: {
-      type: { _eq: "xp" }
-      event: { object: { name: { _eq: "Module" } } }
-    }
+  
+  skillList: transaction(
+    where: {type: {_ilike: "%skill%"}}
+    order_by: {amount: desc}
   ) {
-    aggregate {
-      sum {
-        amount
-      }
-    }
+    id
+    type
+    amount
   }
-
-  lvl: transaction_aggregate(
-    where: {
-      type: { _eq: "level" }
-      event: { object: { name: { _eq: "Module" } } }
-    }
+  
+  xpProgress: transaction(
+    where: {type: {_eq: "xp"}, event: {object: {name: {_eq: "Module"}}}}
+    order_by: {createdAt: asc}
+  ) {
+    amount
+    createdAt
+    path
+  }
+  
+  levelAggr: transaction_aggregate(
+    where: {type: {_eq: "level"}, event: {object: {name: {_eq: "Module"}}}}
   ) {
     aggregate {
       max {
@@ -67,68 +60,53 @@ export async function renderProfile() {
       }
     }
   }
-    skills: transaction(
-  where: {
-    type: { _ilike: "%skill%" }
-  }
-  order_by: {
-    amount: desc
-  }
-) {
-  type
-  amount
-}
-  transactions: transaction(
-  where: {
-    type: { _eq: "xp" }
-    event: {
-      object: {
-        name: { _eq: "Module" }
+  
+  xpAggr: transaction_aggregate(
+    where: {type: {_eq: "xp"}, event: {object: {name: {_eq: "Module"}}}}
+  ) {
+    aggregate {
+      sum {
+        amount
       }
     }
   }
-  order_by: {
-    createdAt: asc
-  }
-) {
-  amount
-  createdAt
-}
 }
   
 `);
 
-    const firstName = result.data.user[0].firstName;
-    const lastName = result.data.user[0].lastName;
-    const email = result.data.user[0].email;
-    const login = result.data.user[0].login;
-    const user = result.data.user[0];
-    const avatar = user.attrs.avatarUrl;
-    const totalXP = result.data.totalXP.aggregate.sum.amount;
-    const level = result.data.lvl.aggregate.max.amount;
-    const cohort = user.cohort[0].cohorts[0].labelName;
-    const auditRatio = user.auditRatio;
-    const skills = result.data.skills;
-    const bestSkills = getBestSkills(result.data.skills);
+    const studentInfo = result.data.student[0];
+    const firstName = studentInfo.firstName;
+    const lastName = studentInfo.lastName;
+    const email = studentInfo.email;
+    const login = studentInfo.login;
+    const avatar = studentInfo.attrs.avatarUrl;
+    const auditRatio = studentInfo.auditRatio;
+    const addressRegion = studentInfo.attrs.addressRegion;
+    const addressStreet = studentInfo.attrs.addressStreet;
+    const cin = studentInfo.attrs.cin;
+    const cohort = studentInfo.timeline[0].cohorts[0].labelName;
     
-    const transactions = result.data.transactions;
+    const totalXP = result.data.xpAggr.aggregate.sum.amount;
+    const level = result.data.levelAggr.aggregate.max.amount;
     
+    const skills = result.data.skillList;
+    const bestSkills = getBestSkills(skills);
+    
+    const transactions = result.data.xpProgress;
     
     document.getElementById("avatar-container").innerHTML = `
         <img src="${avatar}" alt="Profile Picture" class="avatar">
     `;
-
 
     document.getElementById("user-info-container").innerHTML = `
         <p class="usrnm">Welcome back, ${login}</p>
         <p>Email: ${email}</p>
         <p>First Name: ${firstName}</p>
         <p>Last Name: ${lastName}</p>
-        <p>Level: ${level}</p>
-        <p>Total XP: ${formatXP(totalXP)}</p>
-        <p>Cohort: ${cohort}</p>
+        <p>CIN: ${cin}</p>
+        <p>Address (Region): ${addressRegion}</p>
+        <p>Address (Street): ${addressStreet}</p>
     `;
-
 // بطاقة Audit Ratio
     document.getElementById("audit-card").innerHTML = `
         <div class="stat-header">
@@ -167,7 +145,11 @@ export async function renderProfile() {
             <span>${level}</span>
         </div>
     `;
-    
+      
+    document.getElementById("cohort").innerHTML = `
+    <p>${cohort}</p>
+  `;
+
     const xp = cumulativeXP(transactions);
     
     const graphData = calculatePoints(xp);
