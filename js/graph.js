@@ -28,6 +28,7 @@ export function calculatePoints(xp) {
     if (xp.length === 1) return { points: [{ x: width / 2, y: height / 2 }], maxXP };
 
     xp.forEach((value, index) => {
+        console.log(value,index)
         // Calculate the x and y coordinates for each point based on the index and value
         const x = (index / (xp.length - 1)) * width;
         const y = height - ((value / maxXP) * height);
