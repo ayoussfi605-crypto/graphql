@@ -1,14 +1,7 @@
 import { graphqlRequest } from "./api.js";
 import { logout } from "./logout.js";
 import {
-    cumulativeXP,
-    calculatePoints,
-    pointsToString,
-    drawXPGraph,
-    drawPoints,
-    drawAxes,
-    drawYLabels,
-    drawXLabels,
+    drawAuditChart,
     drawSkillsChart
 } from "./graph.js";
 
@@ -40,15 +33,6 @@ query fetchMyDashboard {
     id
     type
     amount
-  }
-  
-  xpProgress: transaction(
-    where: {type: {_eq: "xp"}, event: {object: {name: {_eq: "Module"}}}}
-    order_by: {createdAt: asc}
-  ) {
-    amount
-    createdAt
-    path
   }
   
   levelAggr: transaction_aggregate(
@@ -91,9 +75,7 @@ query fetchMyDashboard {
     const skills = result.data.skillList;
     // Get the best skills from the list of skills
     const bestSkills = getBestSkills(skills);
-    // Get the transactions for the XP graph
-    const transactions = result.data.xpProgress;
-    
+
     document.getElementById("avatar-container").innerHTML = `
         <img src="${avatar}" alt="Profile Picture" class="avatar">
     `;
@@ -107,20 +89,8 @@ query fetchMyDashboard {
         <p>Address (Region): ${addressRegion}</p>
         <p>Address (Street): ${addressStreet}</p>
     `;
-    // Audit Ratio
-    document.getElementById("audit-card").innerHTML = `
-        <div class="stat-header">
-            <div class="icon-title">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a39c87" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/>
-                </svg>
-                <h3>Audit Ratio</h3>
-            </div>
-            <span>${auditRatio.toFixed(1)}</span>
-        </div>
-    `;
     
-    // Total XP
+ // Total XP
     document.getElementById("xp-card").innerHTML = `
         <div class="stat-header">
             <div class="icon-title">
@@ -149,24 +119,8 @@ query fetchMyDashboard {
     document.getElementById("cohort").innerHTML = `
     <p>${cohort}</p>
   `;
-    // Get the cumulative XP from the transactions like this: [100, 300, 600]
-    const xp = cumulativeXP(transactions);
-    
-    const graphData = calculatePoints(xp);
-    
-    const points = graphData.points;
-    const maxXP = graphData.maxXP;
-    
-    const pointsString = pointsToString(points);
-    
-    document.getElementById("xp-graph").innerHTML = "";
     document.getElementById("skills-chart").innerHTML = "";
-    
-    drawAxes();
-    drawYLabels(maxXP);
-    drawXPGraph(pointsString);
-    drawPoints(points);
-    drawXLabels(transactions);
+    drawAuditChart(auditRatio);
     drawSkillsChart(bestSkills);
 }
 

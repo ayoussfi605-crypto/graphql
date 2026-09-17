@@ -52,238 +52,54 @@ renderLogin();
 FILE: ./js/graph.js
 ========================================
 
-export function cumulativeXP(transactions) {
+export function drawAuditChart(auditRatio) {
+    const svg = document.getElementById("audit-chart");
+    if (!svg) return;
 
-    let total = 0;
+    const numericRatio = Number.isFinite(Number(auditRatio)) ? Number(auditRatio) : 0;
+    const safeRatio = numericRatio > 1 ? Math.min(numericRatio, 100) / 100 : Math.min(Math.max(numericRatio, 0), 1);
+    const size = 200;
+    const center = size / 2;
+    const radius = 70;
+    const circumference = 2 * Math.PI * radius;
+    const dashOffset = circumference * (1 - safeRatio);
 
-    return transactions.map(transaction => {
+    svg.innerHTML = "";
+    svg.setAttribute("viewBox", `0 0 ${size} ${size}`);
+    svg.setAttribute("aria-label", `Audit ratio ${numericRatio.toFixed(1)}`);
 
-        total += transaction.amount;
+    const backgroundCircle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    backgroundCircle.setAttribute("cx", String(center));
+    backgroundCircle.setAttribute("cy", String(center));
+    backgroundCircle.setAttribute("r", String(radius));
+    backgroundCircle.setAttribute("fill", "none");
+    backgroundCircle.setAttribute("stroke", "#1F150C");
+    backgroundCircle.setAttribute("stroke-width", "15");
 
-        return total;
+    const progressCircle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    progressCircle.setAttribute("cx", String(center));
+    progressCircle.setAttribute("cy", String(center));
+    progressCircle.setAttribute("r", String(radius));
+    progressCircle.setAttribute("fill", "none");
+    progressCircle.setAttribute("stroke", "#f0b811");
+    progressCircle.setAttribute("stroke-width", "15");
+    progressCircle.setAttribute("stroke-linecap", "round");
+    progressCircle.setAttribute("stroke-dasharray", `${circumference} ${circumference}`);
+    progressCircle.setAttribute("stroke-dashoffset", String(dashOffset));
+    progressCircle.setAttribute("transform", `rotate(-90 ${center} ${center})`);
 
-    });
+    const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    text.setAttribute("x", String(center));
+    text.setAttribute("y", String(center + 6));
+    text.setAttribute("fill", "#341db8");
+    text.setAttribute("font-size", "18");
+    text.setAttribute("font-weight", "700");
+    text.setAttribute("text-anchor", "middle");
+    text.textContent = numericRatio.toFixed(1);
 
-}
-
-
-export function calculatePoints(xp) {
-    const width = 610;
-    const height = 300;
-
-    const maxXP = Math.max(...xp);
-
-    const points = [];
-
-    if (xp.length === 0) return { points, maxXP: 0 };
-    if (xp.length === 1) return { points: [{ x: width / 2, y: height / 2 }], maxXP };
-
-    xp.forEach((value, index) => {
-        const x = (index / (xp.length - 1)) * width;
-
-        const y = height - ((value / maxXP) * height);
-
-        points.push({ x, y });
-    });
-
-    return {
-        points,
-        maxXP
-    };
-}
-
-export function pointsToString(points) {
-
-    return points
-        .map(point => `${point.x},${point.y}`)
-        .join(" ");
-
-}
-
-
-export function drawXPGraph(pointsString) {
-    const svg = document.getElementById("xp-graph");
-
-    const gridGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    gridGroup.setAttribute("stroke", "#412D15"); 
-    gridGroup.setAttribute("stroke-width", "0.5");  
-    gridGroup.setAttribute("opacity", "0.5");
-
-    for(let i = 0; i <= 6; i++) {
-        let y = i * (300 / 6);
-        let hLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
-        hLine.setAttribute("x1", "0"); hLine.setAttribute("y1", y);
-        hLine.setAttribute("x2", "610"); hLine.setAttribute("y2", y);
-        gridGroup.appendChild(hLine);
-        
-        let x = i * (610 / 6);
-        let vLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
-        vLine.setAttribute("x1", x); vLine.setAttribute("y1", "0");
-        vLine.setAttribute("x2", x); vLine.setAttribute("y2", "300");
-        gridGroup.appendChild(vLine);
-    }
-    svg.appendChild(gridGroup);
-
-
-    const defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
-    const gradient = document.createElementNS("http://www.w3.org/2000/svg", "linearGradient");
-    gradient.setAttribute("id", "flow-gradient");
-    gradient.setAttribute("x1", "0%"); gradient.setAttribute("y1", "0%");
-    gradient.setAttribute("x2", "0%"); gradient.setAttribute("y2", "100%"); 
-    
-    const stop1 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
-    stop1.setAttribute("offset", "0%");
-    stop1.setAttribute("stop-color", "#E1DCC9"); 
-    stop1.setAttribute("stop-opacity", "0.5"); 
-    
-    const stop2 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
-    stop2.setAttribute("offset", "100%");
-    stop2.setAttribute("stop-color", "#1F150C"); 
-    stop2.setAttribute("stop-opacity", "0"); 
-    
-    gradient.appendChild(stop1); 
-    gradient.appendChild(stop2);
-    defs.appendChild(gradient);
-    svg.appendChild(defs);
-
-    const polygon = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
-    const areaPoints = `0,300 ${pointsString} 610,300`;
-    polygon.setAttribute("points", areaPoints);
-    polygon.setAttribute("fill", "url(#flow-gradient)");
-    svg.appendChild(polygon);
-
-
-    const polyline = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
-    polyline.setAttribute("points", pointsString);
-    polyline.setAttribute("fill", "none");
-    polyline.setAttribute("stroke", "#E1DCC9"); 
-    polyline.setAttribute("stroke-width", "3"); 
-    
-    svg.appendChild(polyline);
-}
-
-
-export function drawPoints(points) {
-
-    const svg = document.getElementById("xp-graph");
-
-    points.forEach((point, index) => {
-
-        if (
-            index === 0 ||
-            index === points.length - 1 ||
-            index % 10 === 0
-        ) {
-
-            const circle = document.createElementNS(
-                "http://www.w3.org/2000/svg",
-                "circle"
-            );
-
-            circle.setAttribute("cx", point.x);
-            circle.setAttribute("cy", point.y);
-            circle.setAttribute("r", "3");
-            circle.setAttribute("fill", "#000000");
-            circle.setAttribute("stroke", "#E1DCC9");  
-            circle.setAttribute("stroke-width", "1");
-
-            svg.appendChild(circle);
-        }
-    });
-
-}
-
-
-export function drawAxes() {
-    const svg = document.getElementById("xp-graph");
-
-    const yAxis = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    yAxis.setAttribute("x1", "0"); 
-    yAxis.setAttribute("y1", "0");
-    yAxis.setAttribute("x2", "0");
-    yAxis.setAttribute("y2", "300"); 
-    yAxis.setAttribute("stroke", "#412D15"); 
-    yAxis.setAttribute("stroke-width", "3"); 
-
-    const xAxis = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    xAxis.setAttribute("x1", "0"); 
-    xAxis.setAttribute("y1", "300"); 
-    xAxis.setAttribute("x2", "610"); 
-    xAxis.setAttribute("y2", "300");
-    xAxis.setAttribute("stroke", "#412D15");
-    xAxis.setAttribute("stroke-width", "3");
-
-    svg.appendChild(yAxis);
-    svg.appendChild(xAxis);
-}
-
-export function drawYLabels(maxXP) {
-    const svg = document.getElementById("xp-graph");
-    const height = 300;
-    const steps = 6; 
-
-    for (let i = 0; i <= steps; i++) {
-        const value = maxXP - (i * (maxXP / steps));
-        const y = i * (height / steps);
-
-        const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
-        
-        text.setAttribute("x", "-15"); 
-        text.setAttribute("y", y);
-        text.setAttribute("dy", "4"); 
-        text.setAttribute("text-anchor", "end"); 
-        text.setAttribute("font-size", "12");
-        text.setAttribute("fill", "#a39c87"); 
-
-        text.textContent = formatGraphXP(value); 
-
-        svg.appendChild(text);
-    }
-}
-
-function formatGraphXP(xp) {
-
-    if (xp >= 1000000) {
-        return (xp / 1000000).toFixed(0) + " MB";
-    }
-
-    if (xp >= 1000) {
-        return (xp / 1000).toFixed(0) + " kB";
-    }
-
-    return Math.round(xp) + " B";
-}
-
-
-export function drawXLabels(transactions) {
-    const svg = document.getElementById("xp-graph");
-    const width = 610;
-    const height = 300;
-    const steps = 6; 
-
-    const minDate = new Date(transactions[0].createdAt).getTime();
-    const maxDate = new Date(transactions[transactions.length - 1].createdAt).getTime();
-    const timeRange = maxDate - minDate || 1;
-
-    for (let i = 0; i <= steps; i++) {
-        const x = i * (width / steps); 
-        
-        const currentTime = minDate + (i * (timeRange / steps));
-        const date = new Date(currentTime);
-        const label = date.getDate() + "/" + (date.getMonth() + 1);
-
-        const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
-        
-        text.setAttribute("x", x);
-        text.setAttribute("y", height + 25); 
-        text.setAttribute("font-size", "12");
-        text.setAttribute("fill", "#a39c87");
-        text.setAttribute("text-anchor", "middle");
-
-        text.textContent = label;
-
-        svg.appendChild(text);
-    }
+    svg.appendChild(backgroundCircle);
+    svg.appendChild(progressCircle);
+    svg.appendChild(text);
 }
 
 
@@ -349,14 +165,7 @@ FILE: ./js/profile.js
 import { graphqlRequest } from "./api.js";
 import { logout } from "./logout.js";
 import {
-    cumulativeXP,
-    calculatePoints,
-    pointsToString,
-    drawXPGraph,
-    drawPoints,
-    drawAxes,
-    drawYLabels,
-    drawXLabels,
+    drawAuditChart,
     drawSkillsChart
 } from "./graph.js";
 
@@ -365,49 +174,33 @@ export async function renderProfile() {
     const result = await graphqlRequest(`
 
 
-{
-  user {
+query fetchMyDashboard {
+  student: user {
+    id
     login
-    email
     firstName
     lastName
-    avatarUrl
-    attrs
+    email
     auditRatio
-
-    cohort: events(
-      where: {
-        cohorts: {
-          labelName: {
-            _is_null: false
-          }
-        }
-      }
-    ) {
+    attrs
+    timeline: events(where: {cohorts: {labelName: {_is_null: false}}}) {
       cohorts {
         labelName
       }
     }
   }
-
-  totalXP: transaction_aggregate(
-    where: {
-      type: { _eq: "xp" }
-      event: { object: { name: { _eq: "Module" } } }
-    }
+  
+  skillList: transaction(
+    where: {type: {_ilike: "%skill%"}}
+    order_by: {amount: desc}
   ) {
-    aggregate {
-      sum {
-        amount
-      }
-    }
+    id
+    type
+    amount
   }
-
-  lvl: transaction_aggregate(
-    where: {
-      type: { _eq: "level" }
-      event: { object: { name: { _eq: "Module" } } }
-    }
+  
+  levelAggr: transaction_aggregate(
+    where: {type: {_eq: "level"}, event: {object: {name: {_eq: "Module"}}}}
   ) {
     aggregate {
       max {
@@ -415,69 +208,52 @@ export async function renderProfile() {
       }
     }
   }
-    skills: transaction(
-  where: {
-    type: { _ilike: "%skill%" }
-  }
-  order_by: {
-    amount: desc
-  }
-) {
-  type
-  amount
-}
-  transactions: transaction(
-  where: {
-    type: { _eq: "xp" }
-    event: {
-      object: {
-        name: { _eq: "Module" }
+  
+  xpAggr: transaction_aggregate(
+    where: {type: {_eq: "xp"}, event: {object: {name: {_eq: "Module"}}}}
+  ) {
+    aggregate {
+      sum {
+        amount
       }
     }
   }
-  order_by: {
-    createdAt: asc
-  }
-) {
-  amount
-  createdAt
-}
 }
   
 `);
 
-    const firstName = result.data.user[0].firstName;
-    const lastName = result.data.user[0].lastName;
-    const email = result.data.user[0].email;
-    const login = result.data.user[0].login;
-    const user = result.data.user[0];
-    const avatar = user.attrs.avatarUrl;
-    const totalXP = result.data.totalXP.aggregate.sum.amount;
-    const level = result.data.lvl.aggregate.max.amount;
-    const cohort = user.cohort[0].cohorts[0].labelName;
-    const auditRatio = user.auditRatio;
-    const skills = result.data.skills;
-    const bestSkills = getBestSkills(result.data.skills);
+    const studentInfo = result.data.student[0];
+    const firstName = studentInfo.firstName;
+    const lastName = studentInfo.lastName;
+    const email = studentInfo.email;
+    const login = studentInfo.login;
+    const avatar = studentInfo.attrs.avatarUrl;
+    const auditRatio = studentInfo.auditRatio;
+    const addressRegion = studentInfo.attrs.addressRegion;
+    const addressStreet = studentInfo.attrs.addressStreet;
+    const cin = studentInfo.attrs.cin;
+    const cohort = studentInfo.timeline[0].cohorts[0].labelName;
     
-    const transactions = result.data.transactions;
-    
-    
+    const totalXP = result.data.xpAggr.aggregate.sum.amount;
+    const level = result.data.levelAggr.aggregate.max.amount;
+    const skills = result.data.skillList;
+    // Get the best skills from the list of skills
+    const bestSkills = getBestSkills(skills);
+
     document.getElementById("avatar-container").innerHTML = `
         <img src="${avatar}" alt="Profile Picture" class="avatar">
     `;
-
 
     document.getElementById("user-info-container").innerHTML = `
         <p class="usrnm">Welcome back, ${login}</p>
         <p>Email: ${email}</p>
         <p>First Name: ${firstName}</p>
         <p>Last Name: ${lastName}</p>
-        <p>Level: ${level}</p>
-        <p>Total XP: ${formatXP(totalXP)}</p>
-        <p>Cohort: ${cohort}</p>
+        <p>CIN: ${cin}</p>
+        <p>Address (Region): ${addressRegion}</p>
+        <p>Address (Street): ${addressStreet}</p>
     `;
-
-// بطاقة Audit Ratio
+    // Audit Ratio
     document.getElementById("audit-card").innerHTML = `
         <div class="stat-header">
             <div class="icon-title">
@@ -490,7 +266,7 @@ export async function renderProfile() {
         </div>
     `;
     
-    // بطاقة Total XP
+    // Total XP
     document.getElementById("xp-card").innerHTML = `
         <div class="stat-header">
             <div class="icon-title">
@@ -503,7 +279,7 @@ export async function renderProfile() {
         </div>
     `;
     
-    // بطاقة Current Level
+    // Current Level
     document.getElementById("level-card").innerHTML = `
         <div class="stat-header">
             <div class="icon-title">
@@ -515,30 +291,18 @@ export async function renderProfile() {
             <span>${level}</span>
         </div>
     `;
-    
-    const xp = cumulativeXP(transactions);
-    
-    const graphData = calculatePoints(xp);
-    
-    const points = graphData.points;
-    const maxXP = graphData.maxXP;
-    
-    const pointsString = pointsToString(points);
-    
-    document.getElementById("xp-graph").innerHTML = "";
+      
+    document.getElementById("cohort").innerHTML = `
+    <p>${cohort}</p>
+  `;
     document.getElementById("skills-chart").innerHTML = "";
-    
-    drawAxes();
-    drawYLabels(maxXP);
-    drawXPGraph(pointsString);
-    drawPoints(points);
-    drawXLabels(transactions);
+    drawAuditChart(auditRatio);
     drawSkillsChart(bestSkills);
 }
 
 document.getElementById("logout-btn").addEventListener("click", logout);
 
-
+// Function to format the XP value into a more readable format
 function formatXP(xp) {
     if (xp >= 1000000) {
         return (xp / 1000000).toFixed(0) + " MB";
@@ -551,15 +315,16 @@ function formatXP(xp) {
     return xp.toFixed(0) + " B";
 }
 
-
+// Function to get the best skills from the list of skills
 function getBestSkills(skills) {
     const best = {};
     skills.forEach(skill => {
-
+      // Check if the skill type is not already in the best object or if the current skill amount is greater than the existing one
         if(
             !best[skill.type] ||
             skill.amount > best[skill.type]
         ){
+
             best[skill.type] = skill.amount;
         }
 
@@ -667,117 +432,134 @@ renderLogin();
 FILE: ./css/style.css
 ========================================
 
-/* =========================================================
-   1. الإعدادات العامة (Reset & Utilities)
-========================================================= */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+html, body {
+    min-height: 100%;
+    margin: 0;
 }
 
-/* الكلاس الخاص بإخفاء الصفحات لـ SPA */
+body {
+    background-color: #0b0806;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .hidden {
     display: none !important;
 }
 
-
-/* =========================================================
-   2. قسم تسجيل الدخول (Login Section)
-========================================================= */
-/* =========================================================
-   تصميم صفحة تسجيل الدخول (Sign In) - Dark/Earthy Theme
-========================================================= */
+/* (Sign In) - Dark/Earthy Theme */
 #login-section {
-    background-color: #0b0806; /* نفس الخلفية الغامقة ديال البروفايل */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-}
-
-.login-container {
+    position: relative;
     width: 100%;
     max-width: 400px;
-    background: #1F150C; /* البني الداكن */
-    padding: 40px;
-    border-radius: 12px;
-    border: 1px solid #a39c87; /* إطار بيج/ذهبي فخم */
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    background: linear-gradient(160deg, #24190e 0%, #1a1108 100%);
+    padding: 45px 40px;
+    border-radius: 16px;
+    border: 1px solid #3a2c1a;
+    box-shadow:
+        0 20px 50px rgba(0, 0, 0, 0.6),
+        0 0 0 1px rgba(163, 156, 135, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    overflow: hidden;
+}
+#login-section::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #daa813, transparent);
+}
+
+/* thin glowing top accent line */
+.login-container::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #daa813, transparent);
 }
 
 .login-container h1 {
     text-align: center;
-    margin-bottom: 30px;
-    color: #E1DCC9; /* لون كريمي للنص */
+    margin-bottom: 35px;
+    color: #E1DCC9;
+    font-size: 24px;
+    letter-spacing: 0.5px;
 }
 
 #login-form {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 22px;
 }
 
 #login-form label {
-    color: #a39c87; /* لون العناوين ديال input */
-    font-size: 14px;
-    margin-bottom: -10px;
+    color: #a39c87;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: -12px;
 }
 
 #login-form input {
-    padding: 14px;
-    background-color: #0b0806; /* خلفية الإدخال غامقة */
-    border: 1px solid #a39c87; /* حدود بيج */
-    color: #E1DCC9; /* لون الكتابة كريمي */
-    border-radius: 8px;
-    font-size: 16px;
+    padding: 14px 16px;
+    background-color: rgba(0, 0, 0, 0.35);
+    border: 1px solid #412D15;
+    color: #E1DCC9;
+    border-radius: 10px;
+    font-size: 15px;
     outline: none;
-    transition: 0.3s;
+    transition: 0.25s ease;
 }
 
 #login-form input::placeholder {
-    color: #7a7360; /* لون بيج باهت للبلايس هولدر */
+    color: #6b6350;
 }
 
 #login-form input:focus {
-    border-color: #E1DCC9; /* كيضوا الإطار ملي كتدخل تكتب */
-    box-shadow: 0 0 8px rgba(163, 156, 135, 0.3);
+    border-color: #daa813;
+    box-shadow: 0 0 0 3px rgba(218, 168, 19, 0.15);
 }
 
 #login-form button {
+    margin-top: 6px;
     padding: 14px;
     border: none;
-    border-radius: 8px;
-    background-color: #a39c87; /* لون الزر بيج/ذهبي */
-    color: #1F150C; /* لون النص بني داكن باش يبرز */
-    font-size: 16px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #daa813, #a3841a);
+    color: #1F150C;
+    font-size: 15px;
     font-weight: bold;
+    letter-spacing: 0.3px;
     cursor: pointer;
-    transition: 0.3s;
+    transition: 0.25s ease;
 }
 
 #login-form button:hover {
-    background-color: #E1DCC9; /* كيولي كريمي فاتح ملي كتدوز عليه الماوس */
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(218, 168, 19, 0.25);
 }
 
 #error-message {
     min-height: 20px;
-    color: #ef4444; /* أحمر باش يبان الخطأ واضح فوق الظلام */
+    color: #f87171;
     text-align: center;
-    font-size: 14px;
-    font-weight: bold;
+    font-size: 13px;
+    font-weight: 600;
 }
 
-/* =========================================================
-   3. قسم البروفايل (Profile Section) - تطبيق الألوان الفخمة
-========================================================= */
+/* (Profile Section)  */
 #profile-section {
-    background-color: #000000; /* الخلفية السوداء */
-    color: #E1DCC9; /* لون النصوص الكريمي */
+    background-color: #000000; 
+    color: #E1DCC9; 
     width: 100%;
     min-height: 100vh;
     padding: 20px 0;
@@ -786,7 +568,7 @@ body {
 }
 
 .dashboard {
-    width: 80%; /* الكونتينيير الداخلي 80% */
+    width: 80%; 
     margin: 0 auto;
     flex: 1;
     display: flex;
@@ -796,8 +578,8 @@ body {
 
 /* Header */
 header.header {
-    border: 1px solid #412D15; /* إطار بالبني الفاتح */
-    background: #1F150C; /* لون الخلفية بني داكن جداً */
+    border: 1px solid #412D15; 
+    background: #1F150C; 
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -810,7 +592,7 @@ header.header {
     gap: 10px;
     font-size: 20px;
     font-weight: bold;
-    color: #a39c87; /* لون النص الكريمي */
+    color: #a39c87; 
 }
 /* Logout Button */
 #logout-btn {
@@ -826,34 +608,37 @@ header.header {
 #logout-btn:hover { background-color: #b91c1c; }
 
 /* Status (Online) */
-.header .online-status {
+#cohort {
     position: relative;
     margin-right: 20px;
+    display: flex;
+    align-items: center;
 }
 
-.header .online-status::before {
+#cohort::before {
     content: "";
     position: absolute;
     top: 50%;
-    transform: translateY(-50%);
     left: -12px;
+    transform: translateY(-50%);
     width: 6px;
     height: 6px;
     background: rgb(43, 255, 0);
     border-radius: 50%;
+    z-index: 2;
 }
 
-.header .online-status::after {
+#cohort::after {
     content: "";
     position: absolute;
     top: 50%;
-    transform: translateY(-50%);
     left: -17px;
+    transform: translateY(-50%);
     width: 16px;
     height: 16px;
-    background: #0f03;
+    background: rgba(43, 255, 0, 0.2);
     border-radius: 50%;
-    animation: hover 1.8s ease-in-out both alternate infinite;
+    animation: bounce 1.8s ease-in-out both alternate infinite;
 }
 
 /* Main Layout (Sidebar + Content) */
@@ -866,26 +651,30 @@ header.header {
 
 /* Sidebar (Left) */
 .sidebar {
-    background: #1F150C;
+    background: linear-gradient(160deg, #24190e 0%, #1a1108 100%);
     border: 1px solid #412D15;
-    border-radius: 12px;
-    padding: 20px;
+    border-radius: 16px;
+    padding: 35px 20px;
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    align-items: center;
+    gap: 22px;
     word-break: break-word;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
 }
 
 .avatar-section {
     background: transparent;
-    padding: 0 60px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
 }
 .user-info .usrnm {
     color: #E1DCC9;
-    font-size: 17px;
+    font-size: 18px;
     font-style: italic;
     font-weight: bold;
-    margin: 10px 0;
+    margin: 0;
 }
 .user-info{
     color: #daa813;
@@ -897,18 +686,44 @@ header.header {
 }
 
 .avatar {
-    width: 120px;
-    height: 120px;
+    width: 110px;
+    height: 110px;
     border-radius: 50%;
     object-fit: cover;
-    border: 3px solid #e5f0b5; /* إطار الصورة */
+    border: 3px solid #daa813;
+    box-shadow: 0 0 0 4px rgba(218, 168, 19, 0.12), 0 8px 20px rgba(0, 0, 0, 0.5);
 }
 
 /* User Info Section */
-.user-info h2 { color: #a39c87; font-weight: 400; font-size: 16px; }
-.user-info h1 { color: #E1DCC9; font-size: 32px; margin: 10px 0; }
-.user-info p { color: #a39c87; }
 
+.user-info {
+    color: #daa813;
+    font-size: 17px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+    padding-top: 18px;
+    border-top: 1px solid #412D15;
+}
+.user-info h2 {
+    color: #a39c87;
+    font-weight: 400;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.user-info h1 {
+    color: #E1DCC9;
+    font-size: 30px;
+    margin: 4px 0;
+}
+
+.user-info p {
+    color: #a39c87;
+    font-size: 13px;
+}
 /* Content (Right) */
 .content {
     display: flex;
@@ -919,7 +734,7 @@ header.header {
 /* Stats Row */
 .stats-row {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(236px, 1fr));
     gap: 20px;
 }
 
@@ -940,36 +755,35 @@ header.header {
 .stat-card span {
     font-size: 36px;
     font-weight: bold;
-    color: #E1DCC9; /* لون النص الكريمي */
+    color: #E1DCC9; 
 }
 
-/* الكونتينيير الكبير اللي جامع كلشي */
+
 .stat-header {
     display: flex;
-    justify-content: space-between; /* هادي هي اللي غتبعد الكلمة على الرقم لأقصى حد */
-    align-items: center; /* هادي كتخليهم مقادين فسطر واحد عمودياً */
+    justify-content: space-between; 
+    align-items: center; 
     width: 100%;
 }
 
-/* المجموعة اللي فيها الأيقونة والعنوان */
+
 .icon-title {
     display: flex;
     align-items: center;
-    gap: 10px; /* المسافة بين الأيقونة والكلمة */
+    gap: 10px; 
 }
 
-/* حيدنا الهامش من العنوان باش ما يهربش على الأيقونة */
 .icon-title h3 {
     margin: 0;
     font-size: 16px;
-    color: #a39c87; /* لون بيج غامق شوية */
+    color: #a39c87; 
 }
 
-/* ستايل ديال الرقم باش يجي باين */
+
 .stat-header > span {
     font-size: 28px;
     font-weight: bold;
-    color: #E1DCC9; /* لون كريمي فخم */
+    color: #E1DCC9; 
 }
 
 .stat-card h3 {
@@ -980,11 +794,11 @@ header.header {
 
 /* Graph Cards */
 .graph-card {
-    background: #1F150C; /* لون الخلفية البني الداكن جداً للرسوم */
+    background: #1F150C;
     border: 1px solid #412D15;
     padding: 20px;
     border-radius: 12px;
-    color: #E1DCC9; /* لون النص الكريمي */
+    color: #E1DCC9; 
     display: flex;
     flex-direction: column;
 }
@@ -997,20 +811,28 @@ header.header {
 /* Graphs Row */
 .graphs-row {
     display: grid;
-    grid-template-columns: 1.5fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px;
     flex: 1;
 }
 
-/* تحسين الـ SVG داخل البطاقة */
 .graph-card svg {
     flex: 1;
 }
 
-/* =========================================================
-   4. Animations
-========================================================= */
-@keyframes hover {
+.audit-graph {
+    align-items: center;
+    justify-content: center;
+}
+
+#audit-chart {
+    width: 200px;
+    height: 200px;
+    display: block;
+}
+
+/* Animations */
+@keyframes bounce {
     0%,
     100% {
         transform: translateY(-50%) scale(1);
@@ -1018,6 +840,18 @@ header.header {
 
     50% {
         transform: translateY(-50%) scale(0.4);
+    }
+}
+
+@media (max-width: 848px) {
+    .main-container {
+        grid-template-columns: 1fr; 
+    }
+}
+
+@media (max-width: 625px) {
+    .logo {
+        display: none;
     }
 }
 
@@ -1059,9 +893,10 @@ FILE: ./index.html
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="#a39c87" xmlns="http://www.w3.org/2000/svg">
                 <path d="M14.051 2.751l4.935 2.85c.816-.859 2.173-.893 3.032-.077.148.14.274.301.377.477.589 1.028.232 2.339-.796 2.928-.174.1-.361.175-.558.223v5.699c1.146.273 1.854 1.423 1.58 2.569-.048.204-.127.4-.232.581-.592 1.023-1.901 1.374-2.927.782-.196-.113-.375-.259-.526-.429l-4.905 2.832c.372 1.124-.238 2.335-1.361 2.706-.217.071-.442.108-.67.108-1.181.001-2.139-.955-2.14-2.136 0-.205.029-.41.088-.609l-4.936-2.847c-.816.854-2.171.887-3.026.07-.854-.816-.886-2.171-.07-3.026.283-.297.646-.506 1.044-.603l.001-5.699c-1.15-.276-1.858-1.433-1.581-2.584.047-.198.123-.389.224-.566.592-1.024 1.902-1.374 2.927-.782.177.101.339.228.48.377l4.938-2.85C9.613 1.612 10.26.423 11.39.088 11.587.029 11.794 0 12 0c1.181-.001 2.139.954 2.14 2.134.001.209-.03.418-.089.617zm-.515.877c-.019.021-.037.039-.058.058l6.461 11.19c.026-.009.056-.016.082-.023V9.146c-1.145-.283-1.842-1.442-1.558-2.588.006-.024.012-.049.019-.072l-4.946-2.858zm-3.015.059l-.06-.06-4.946 2.852c.327 1.135-.327 2.318-1.461 2.645-.026.008-.051.014-.076.021v5.708l.084.023 6.461-11.19-.002.001zm2.076.507c-.39.112-.803.112-1.192 0l-6.46 11.189c.294.283.502.645.6 1.041h12.911c.097-.398.307-.761.603-1.044L12.597 4.194zm.986 16.227l4.913-2.838c-.015-.047-.027-.094-.038-.142H5.542l-.021.083 4.939 2.852c.388-.404.934-.653 1.54-.653.627 0 1.19.269 1.583.698z"></path>
                 </svg>graph-QL</div>
-                <div class="online-status"><span class="dot"></span> online</div>
+                <div id="cohort"><span></span></div>
                 <button id="logout-btn">Sign Out</button>
             </header>
+
 
             <!-- Main Layout (Sidebar + Content) -->
             <div class="main-container">
@@ -1094,9 +929,9 @@ FILE: ./index.html
 
                     <!-- Graphs Section -->
                     <div class="graphs-row">
-                        <div class="graph-card exp-graph">
-                            <h3>XP over time</h3>
-                            <svg id="xp-graph" viewBox="-80 -10 720 360" preserveAspectRatio="none" style="width: 100%; height: 100%; min-height: 250px;"></svg>
+                        <div class="graph-card audit-graph">
+                            <h3>Audit Ratio</h3>
+                            <svg id="audit-chart" viewBox="0 0 200 200"></svg>
                         </div>
                         
                         <div class="graph-card skills-graph">
@@ -1109,7 +944,7 @@ FILE: ./index.html
             </div>
         </div>
     </div>
-
     <script type="module" src="./js/main.js"></script>
+
 </body>
 </html>
