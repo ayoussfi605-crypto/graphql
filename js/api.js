@@ -19,8 +19,8 @@ export async function graphqlRequest(query) {
         return await response.json();
     } catch (error) {
 
-        console.error(error);
-
+        console.error("Error fetching data:",error);
+    
     }
 
-}
+};

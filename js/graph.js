@@ -23,7 +23,7 @@ export function drawAuditChart(auditRatio) {
     backgroundCircle.setAttribute("cy", String(center));
     backgroundCircle.setAttribute("r", String(radius));
     backgroundCircle.setAttribute("fill", "none");
-    backgroundCircle.setAttribute("stroke", "#2a1f14");
+    backgroundCircle.setAttribute("stroke", "#D10056");
     backgroundCircle.setAttribute("stroke-width", "18"); 
 
     // Progress Circle
@@ -32,7 +32,7 @@ export function drawAuditChart(auditRatio) {
     progressCircle.setAttribute("cy", String(center));
     progressCircle.setAttribute("r", String(radius));
     progressCircle.setAttribute("fill", "none");
-    progressCircle.setAttribute("stroke", "#a39c87");
+    progressCircle.setAttribute("stroke", "#FFFC8C");
     progressCircle.setAttribute("stroke-width", "18");
     progressCircle.setAttribute("stroke-linecap", "round");
     progressCircle.setAttribute("stroke-dasharray", `${circumference} ${circumference}`);

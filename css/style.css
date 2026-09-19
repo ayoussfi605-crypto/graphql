@@ -14,75 +14,55 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    min-height: 100vh;
 }
 
 .hidden {
     display: none !important;
 }
 
-/* (Sign In) - Dark/Earthy Theme */
+/* (Sign In) - Simple & Matched with Profile Theme */
 #login-section {
     position: relative;
     width: 100%;
     max-width: 400px;
-    background: linear-gradient(160deg, #24190e 0%, #1a1108 100%);
-    padding: 45px 40px;
-    border-radius: 16px;
-    border: 1px solid #3a2c1a;
-    box-shadow:
-        0 20px 50px rgba(0, 0, 0, 0.6),
-        0 0 0 1px rgba(163, 156, 135, 0.05),
-        inset 0 1px 0 rgba(255, 255, 255, 0.03);
-    overflow: hidden;
-}
-#login-section::before {
-    content: "";
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, transparent, #daa813, transparent);
-}
-
-/* thin glowing top accent line */
-.login-container::before {
-    content: "";
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, transparent, #daa813, transparent);
+    background: #1F150C; 
+    padding: 40px;
+    border-radius: 12px;
+    border: 1px solid #412D15; 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
 .login-container h1 {
-    text-align: center;
-    margin-bottom: 35px;
+    text-align: left;
+    margin-bottom: 25px;
     color: #E1DCC9;
-    font-size: 24px;
-    letter-spacing: 0.5px;
+    font-size: 20px;
+    font-weight: bold;
 }
 
 #login-form {
     display: flex;
     flex-direction: column;
-    gap: 22px;
+    gap: 18px;
 }
 
 #login-form label {
     color: #a39c87;
     font-size: 13px;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    margin-bottom: -12px;
+    text-transform: none; 
+    margin-bottom: -10px;
 }
 
 #login-form input {
-    padding: 14px 16px;
-    background-color: rgba(0, 0, 0, 0.35);
+    padding: 12px 14px;
+    background-color: #0b0806; 
     border: 1px solid #412D15;
     color: #E1DCC9;
     border-radius: 10px;
-    font-size: 15px;
+    font-size: 14px;
     outline: none;
-    transition: 0.25s ease;
+    transition: 0.2s ease;
 }
 
 #login-form input::placeholder {
@@ -90,30 +70,29 @@ body {
 }
 
 #login-form input:focus {
-    border-color: #daa813;
-    box-shadow: 0 0 0 3px rgba(218, 168, 19, 0.15);
+    border-color: #a39c87; 
+    box-shadow: none;
 }
 
 #login-form button {
-    margin-top: 6px;
-    padding: 14px;
+    margin-top: 5px;
+    padding: 12px;
     border: none;
     border-radius: 10px;
-    background: linear-gradient(135deg, #daa813, #a3841a);
-    color: #1F150C;
-    font-size: 15px;
+    background-color: #5f4934; 
+    color: white;
+    font-size: 14px;
     font-weight: bold;
-    letter-spacing: 0.3px;
     cursor: pointer;
-    transition: 0.25s ease;
+    transition: 0.3s;
 }
 
 #login-form button:hover {
-    filter: brightness(1.1);
-    transform: translateY(-1px);
-    box-shadow: 0 6px 16px rgba(218, 168, 19, 0.25);
+    background-color: #b91c1c; 
+    filter: none;
+    transform: none;
+    box-shadow: none;
 }
-
 #error-message {
     min-height: 20px;
     color: #f87171;
@@ -210,9 +189,10 @@ header.header {
 /* Main Layout (Sidebar + Content) */
 .main-container {
     display: grid;
-    grid-template-columns: 300px 1fr 1fr; 
+    grid-template-columns: 280px minmax(0, 1fr) minmax(0, 1fr); 
     gap: 20px;
     flex: 1;
+    width: 100%;
 }
 
 /* Sidebar (Left) */
@@ -235,21 +215,6 @@ header.header {
     display: flex;
     justify-content: center;
 }
-.user-info .usrnm {
-    color: #E1DCC9;
-    font-size: 18px;
-    font-style: italic;
-    font-weight: bold;
-    margin: 0;
-}
-.user-info{
-    color: #daa813;
-    font-size: 17px;
-    text-align: left;
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-}
 
 .avatar {
     width: 110px;
@@ -260,8 +225,7 @@ header.header {
     box-shadow: 0 0 0 4px rgba(218, 168, 19, 0.12), 0 8px 20px rgba(0, 0, 0, 0.5);
 }
 
-/* User Info Section */
-
+/* User Info Section (Merged and Cleaned) */
 .user-info {
     color: #daa813;
     font-size: 17px;
@@ -273,6 +237,15 @@ header.header {
     padding-top: 18px;
     border-top: 1px solid #412D15;
 }
+
+.user-info .usrnm {
+    color: #E1DCC9;
+    font-size: 18px;
+    font-style: italic;
+    font-weight: bold;
+    margin: 0;
+}
+
 .user-info h2 {
     color: #a39c87;
     font-weight: 400;
@@ -280,6 +253,7 @@ header.header {
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
+
 .user-info h1 {
     color: #E1DCC9;
     font-size: 30px;
@@ -290,17 +264,11 @@ header.header {
     color: #a39c87;
     font-size: 13px;
 }
+
 /* Content (Right) */
 .content {
     display: flex;
     flex-direction: column;
-    gap: 20px;
-}
-
-/* Stats Row */
-.stats-row {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(236px, 1fr));
     gap: 20px;
 }
 
@@ -315,7 +283,7 @@ header.header {
 .stat-card h3 {
     font-size: 16px;
     color: #cbd5e1;
-    margin-bottom: 10px;
+    margin-bottom: 0; 
 }
 
 .stat-card span {
@@ -324,14 +292,12 @@ header.header {
     color: #E1DCC9; 
 }
 
-
 .stat-header {
     display: flex;
     justify-content: space-between; 
     align-items: center; 
     width: 100%;
 }
-
 
 .icon-title {
     display: flex;
@@ -345,17 +311,10 @@ header.header {
     color: #a39c87; 
 }
 
-
 .stat-header > span {
     font-size: 28px;
     font-weight: bold;
     color: #E1DCC9; 
-}
-
-.stat-card h3 {
-    font-size: 16px;
-    color: #cbd5e1;
-    margin-bottom: 0; 
 }
 
 /* Graph Cards */
@@ -372,15 +331,8 @@ header.header {
 .graph-card h3 {
     margin-bottom: 20px;
     color: #E1DCC9;
-    margin-right: 420px;
-}
-
-/* Graphs Row */
-.graphs-row {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-    flex: 1;
+    width: 100%; 
+    text-align: left;
 }
 
 .graph-card svg {
@@ -408,6 +360,7 @@ header.header {
     flex: 1;
     min-height: 280px;
 }
+
 #audit-chart {
     width: 220px;  
     height: 220px; 
@@ -420,7 +373,6 @@ header.header {
     100% {
         transform: translateY(-50%) scale(1);
     }
-
     50% {
         transform: translateY(-50%) scale(0.4);
     }
@@ -434,7 +386,7 @@ header.header {
 
 @media (max-width: 1200px) {
     .main-container {
-        grid-template-columns: 1fr 1fr; 
+        grid-template-columns: 280px 1fr; 
     }
 
     .right-column {

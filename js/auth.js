@@ -1,3 +1,5 @@
+const URL = "https://learn.zone01oujda.ma/api/graphql-engine/v1/graphql";
+
 export async function login(data) {
     try {
         const response = await fetch(
@@ -20,11 +22,46 @@ export async function login(data) {
 
     } catch (error) {
         console.error("Error trying to login:", error);
+        return { status: 500, token: null };
     }
 }
 
-export function isAuthenticated() {
+// Verification asynchrone m3a l-server bach n-t2kdo wach l-token valid bssih
+export async function isAuthenticated() {
+    const token = localStorage.getItem("token");
+    if (!token) {
+        return false;
+    }
 
-    return localStorage.getItem("token") !== null;
+    try {
+        const response = await fetch(URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + token,
+            },
+            body: JSON.stringify({
+                query: `{
+                    user {
+                        id
+                        login
+                    }
+                }`
+            }),
+        });
 
+        const result = await response.json();
+        
+        // Ila kan response ok w kayn data d user, ra l-token valid
+        if (response.ok && result.data && result.data.user && result.data.user.length > 0) {
+            return true;
+        } else {
+            // Ila kan invalid wla expired, n-ms7oh mn localStorage
+            localStorage.removeItem("token");
+            return false;
+        }
+    } catch (error) {
+        console.error("Error validating token:", error);
+        return false;
+    }
 }

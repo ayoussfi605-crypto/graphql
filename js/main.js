@@ -9,14 +9,17 @@ export function showPage(pageId) {
     document.getElementById(pageId).classList.remove("hidden");
 }
 
-export function checkAuth() {
-    if (isAuthenticated()) {
+export async function checkAuth() {
+    const isLogged = await isAuthenticated();
+
+    if (isLogged) {
         showPage("profile-section");
         renderProfile(); 
     } else {
         showPage("login-section");
+        renderLogin(); 
     }
 }
 
+// Run app check on load
 checkAuth();
-renderLogin(); 
