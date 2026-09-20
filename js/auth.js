@@ -2,13 +2,15 @@ const URL = "https://learn.zone01oujda.ma/api/graphql-engine/v1/graphql";
 
 export async function login(data) {
     try {
+        const credentials = `${data.identifier}:${data.password}`;
+        const utf8Credentials = unescape(encodeURIComponent(credentials));
         const response = await fetch(
             "https://learn.zone01oujda.ma/api/auth/signin",
             {
                 method: "POST",
                 headers: {
                     Authorization:
-                        "Basic " + btoa(`${data.identifier}:${data.password}`),
+                        'Basic ' + btoa(utf8Credentials),
                 },
             }
         );

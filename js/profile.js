@@ -62,7 +62,10 @@ query fetchMyDashboard {
     const studentInfo = result?.data?.student?.[0];
     const totalXP = result?.data?.xpAggr?.aggregate?.sum?.amount ?? 0;
     const timeline = studentInfo?.timeline || [];
-    emptydata(totalXP,studentInfo.timeline.length)
+    if(totalXP === null || studentInfo.timeline.length === 0 ){
+      emptydata()
+      return
+    }
 
     const firstName = studentInfo.firstName;
     const lastName = studentInfo.lastName;
@@ -161,8 +164,8 @@ function getBestSkills(skills) {
     return best;
 };
 
-function emptydata(xp,timelinelen){
-    if (xp === null || timelinelen ===0) {
+function emptydata(){
+    
         document.getElementById("profile-section").innerHTML = `
             <div class="dashboard" style="width: 80%; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; padding-top: 20px;">
                 <header class="header">
@@ -177,8 +180,10 @@ function emptydata(xp,timelinelen){
                 </div>
             </div>
         `;
-        document.getElementById("logout-btn").addEventListener("click", logout);
-        return;
-    }
+        document.getElementById("logout-btn").addEventListener("click", () => {
+    localStorage.removeItem("token");
+    window.location.href = "/"; 
+    });    
 };
-renderProfile();
+
+// renderProfile()
