@@ -63,7 +63,7 @@ query fetchMyDashboard {
     const totalXP = result?.data?.xpAggr?.aggregate?.sum?.amount ?? 0;
     const timeline = studentInfo?.timeline || [];
     if(totalXP === null || studentInfo.timeline.length === 0 ){
-      emptydata()
+      emptydata(studentInfo.login)
       return
     }
 
@@ -164,7 +164,7 @@ function getBestSkills(skills) {
     return best;
 };
 
-function emptydata(){
+function emptydata(username){
     
         document.getElementById("profile-section").innerHTML = `
             <div class="dashboard" style="width: 80%; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; padding-top: 20px;">
@@ -175,7 +175,7 @@ function emptydata(){
                     <button id="logout-btn">Sign Out</button>
                 </header>
                 <div style="background: #1F150C; border: 1px solid #412D15; border-radius: 12px; padding: 50px; text-align: center; color: #E1DCC9;">
-                    <h2>Welcome! 👋</h2>
+                    <h2>Welcome ${username}! 👋</h2>
                     <p style="color: #a39c87; margin-top: 10px;">No data or Project found in your account</p>
                 </div>
             </div>
@@ -185,5 +185,3 @@ function emptydata(){
     window.location.href = "/"; 
     });    
 };
-
-// renderProfile()
