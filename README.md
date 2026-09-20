@@ -4,7 +4,7 @@ A single-page web app that authenticates against the Zone01 Oujda platform and d
 
 ## Host name
 
-js-graphql
+https://js-graphql.netlify.app/
 
 ## ✨ Features
 
