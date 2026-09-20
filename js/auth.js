@@ -28,7 +28,7 @@ export async function login(data) {
     }
 }
 
-// Verification asynchrone m3a l-server bach n-t2kdo wach l-token valid bssih
+// Verification asynchrone whit server if token valid or not
 export async function isAuthenticated() {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -54,11 +54,11 @@ export async function isAuthenticated() {
 
         const result = await response.json();
         
-        // Ila kan response ok w kayn data d user, ra l-token valid
+        // if response ok and data is exist, token is valid
         if (response.ok && result.data && result.data.user && result.data.user.length > 0) {
             return true;
         } else {
-            // Ila kan invalid wla expired, n-ms7oh mn localStorage
+            // if invalid or expired, removed from localStorage
             localStorage.removeItem("token");
             return false;
         }

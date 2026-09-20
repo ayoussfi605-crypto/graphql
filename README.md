@@ -2,6 +2,10 @@
 
 A single-page web app that authenticates against the Zone01 Oujda platform and displays a personal student profile — XP, level, audit ratio, skills and a cumulative XP graph — built entirely with **vanilla JavaScript** (no frameworks, no charting libraries) and the platform's **GraphQL** API.
 
+## Host name
+
+js-graphql
+
 ## ✨ Features
 
 - **Login** with username/email + password (Basic Auth → JWT)
