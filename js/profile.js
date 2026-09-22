@@ -18,6 +18,8 @@ query fetchMyDashboard {
     lastName
     email
     auditRatio
+    totalUp
+    totalDown
     attrs
     timeline: events(where: {cohorts: {labelName: {_is_null: false}}}) {
       cohorts {
@@ -63,10 +65,7 @@ query fetchMyDashboard {
     const totalXP = result?.data?.xpAggr?.aggregate?.sum?.amount ?? 0;
     const timeline = studentInfo?.timeline || [];
     if(totalXP === null || studentInfo.timeline.length === 0 ){
-      emptydata(studentInfo.login)
-      return
-    }
-
+    emptydata(studentInfo.login);return};
     const firstName = studentInfo.firstName;
     const lastName = studentInfo.lastName;
     const email = studentInfo.email;
@@ -127,7 +126,7 @@ query fetchMyDashboard {
     <p>${cohort}</p>
   `;
     document.getElementById("skills-chart").innerHTML = "";
-    drawAuditChart(auditRatio);
+    drawAuditChart(studentInfo);
     drawSkillsChart(bestSkills);
 }
 

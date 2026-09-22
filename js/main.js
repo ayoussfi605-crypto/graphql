@@ -21,5 +21,4 @@ export async function checkAuth() {
     }
 }
 
-// Run app check on load
 checkAuth();

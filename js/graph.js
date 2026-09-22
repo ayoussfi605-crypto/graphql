@@ -1,121 +1,165 @@
+// Audit ratio graph
+export function drawAuditChart(studentInfo) {
 
-// Audit ration graph
-export function drawAuditChart(auditRatio) {
     const svg = document.getElementById("audit-chart");
+
     if (!svg) return;
 
-    const numericRatio = Number.isFinite(Number(auditRatio)) ? Number(auditRatio) : 0;
+    // Get total UP and make sure it is a number
+    const totalUp = studentInfo.totalUp ;
     
-    const maxRatio = 3.0; 
-    const safeRatio = Math.min(Math.max(numericRatio, 0), maxRatio) / maxRatio;
+    const totalDown = studentInfo.totalDown ;
 
-    const size = 260;
-    const center = size / 2;
-    const radius = 95; 
-    const circumference = 2 * Math.PI * radius;
-    const dashOffset = circumference * (1 - safeRatio);
+    const ratio = studentInfo.auditRatio ;
+
+    // Add UP and DOWN to get the total audits
+    const total = totalUp + totalDown;
+
+
+    // Calculate the UP percentage
+    // Example: 80 / 100 = 0.8 = 80%
+    const upPercentage = totalUp / total;
+
+
+    // Set the SVG size
+    const svgSize = 200;
+
+    // Find the center of the SVG
+    // 200 / 2 = 100
+    const centerPoint = svgSize / 2;
+
+    const radius = 70;
+
+    // Calculate the full length of the circle
+    // Formula: 2 × PI × radius
+    const circleCircumference = 2 * Math.PI * radius;
+
+    // Calculate how much of the circle is used for UP
+    // Example: 80% × circle length
+    const upDashLength = upPercentage * circleCircumference;
 
     svg.innerHTML = "";
-    svg.setAttribute("viewBox", `0 0 ${size} ${size}`);
-    svg.setAttribute("aria-label", `Audit ratio ${numericRatio.toFixed(1)}`);
 
-    // Background Circle
-    // const backgroundCircle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    // backgroundCircle.setAttribute("cx", String(center));
-    // backgroundCircle.setAttribute("cy", String(center));
-    // backgroundCircle.setAttribute("r", String(radius));
-    // backgroundCircle.setAttribute("fill", "none");
-    // backgroundCircle.setAttribute("stroke", "#D10056");
-    // backgroundCircle.setAttribute("stroke-width", "18"); 
-    const backgroundCircle = `
-    <circle cx="${center}" cy="${center}" r="${radius}" fill="none" stroke="#D10056" stroke-width="18" />
-    `
+    // Set the SVG coordinate system
+    // It goes from 0 to 200 on X and Y
+    svg.setAttribute("viewBox", `0 0 ${svgSize} ${svgSize}`);
 
-    // Progress Circle
-    // const progressCircle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    // progressCircle.setAttribute("cx", String(center));
-    // progressCircle.setAttribute("cy", String(center));
-    // progressCircle.setAttribute("r", String(radius));
-    // progressCircle.setAttribute("fill", "none");
-    // progressCircle.setAttribute("stroke", "#FFFC8C");
-    // progressCircle.setAttribute("stroke-width", "18");
-    // progressCircle.setAttribute("stroke-linecap", "round");
-    // progressCircle.setAttribute("stroke-dasharray", `${circumference} ${circumference}`);
-    // progressCircle.setAttribute("stroke-dashoffset", String(dashOffset));
-    // progressCircle.setAttribute("transform", `rotate(-90 ${center} ${center})`);
-    const progressCircle = `
-    <circle cx="${center}" cy="${center}" r="${radius}" fill="none" stroke="#FFFC8C" stroke-width="18" stroke-linecap="round" 
-    stroke-dasharray="${circumference} ${circumference}" stroke-dashoffset="${dashOffset}" transform="rotate(-90 ${center} ${center})" />
-    `
-    // Center Text 
-    // const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    // text.setAttribute("x", String(center));
-    // text.setAttribute("y", String(center + 10));
-    // text.setAttribute("fill", "#E1DCC9");
-    // text.setAttribute("font-size", "36"); 
-    // text.setAttribute("font-weight", "700");
-    // text.setAttribute("text-anchor", "middle");
-    // text.textContent = numericRatio.toFixed(1);
-    const text = `
-        <text x=${center} y=${center+10} fill="#E1DCC9" font-size="36" font-weight="700" text-anchor="middle">${numericRatio.toFixed(1)}<text/>
-    `
-    svg.innerHTML += (backgroundCircle);
-    svg.innerHTML += (progressCircle);
-    svg.innerHTML += (text);
+    // Add a label for accessibility
+    // Example: "Audit ratio 4.0"
+    svg.setAttribute("aria-label", `Audit ratio ${ratio.toFixed(1)}`);
+
+
+    // Create the background circle
+    const background = `
+        <circle
+            cx="${centerPoint}"
+            cy="${centerPoint}"
+            r="${radius}"
+            fill="none"
+            stroke="#D10056"
+            stroke-width="18"
+        />
+    `;
+
+
+    // Create the UP progress circle
+    const progress = `
+        <circle
+            cx="${centerPoint}"
+            cy="${centerPoint}"
+            r="${radius}"
+            fill="none"
+            stroke="#FFFC8C"
+            stroke-width="18"
+            // Show only the UP part of the circle
+            stroke-dasharray="${upDashLength} ${circleCircumference}"
+
+            // Start the progress from the top
+            transform="rotate(-90 ${centerPoint} ${centerPoint})"
+        />
+    `;
+
+
+    // Create the text inside the circle
+    const label = `
+        <text
+            x="${centerPoint}"
+            y="${centerPoint + 10}"
+            fill="#E1DCC9"
+            font-size="36"
+            font-weight="700"
+            text-anchor="middle"
+        >
+            ${ratio.toFixed(1)}
+        </text>
+    `;
+
+    svg.innerHTML += background;
+    svg.innerHTML += progress;
+    svg.innerHTML += label;
 }
 
-// skils graph
+// Skills graph
 export function drawSkillsChart(bestSkills) {
     const svg = document.getElementById("skills-chart");
-    svg.innerHTML = ""; 
 
-    const totalSkills = Object.keys(bestSkills).length;
-    const svgHeight = totalSkills * 40; 
-    
-    
+    if (!svg) return;
+
+
+    // Convert the skills object into an array
+    // Example: [["skill_go", 80], ["skill_js", 70]]
+    const entries = Object.entries(bestSkills);
+
+    // Count the total number of skills
+    const totalSkills = entries.length;
+
+    // Calculate the SVG height
+    // Each skill needs 40px of height
+    const svgHeight = totalSkills * 40;
+
+
+    // Set the SVG coordinate system
     svg.setAttribute("viewBox", `0 0 500 ${svgHeight}`);
 
-    
-    Object.entries(bestSkills).forEach(([name, value], index) => {
-        const yPosition = index * 40; 
+    svg.innerHTML = "";
+
+    // Store all SVG elements before adding them to the SVG
+    let svgContent = "";
+
+    // Create a row for each skill
+    entries.forEach(([name, value], index) => {
+
+        // Calculate the vertical position of the skill
+        const yPosition = index * 40;
+
+        // Calculate the width of the progress bar
+        // Example: 80% of 350 = 280px
+        const barWidth = (value / 100) * 350;
+
+        // Remove "skill_" from the skill name
+        // Example: "skill_go" becomes "go"
+        const cleanName = name.replace("skill_", "");
 
 
-        const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
-        label.setAttribute("x", "0"); 
-        label.setAttribute("y", yPosition + 15); 
-        label.setAttribute("fill", "#cccbc7"); 
-        label.setAttribute("font-size", "16px");
-        label.textContent = name.replace("skill_", "");
-        svg.appendChild(label);
+        // Add the skill name
+        svgContent += `
+            <!-- Skill Name -->
+            <text x="0" y="${yPosition + 15}" fill="#cccbc7" font-size="16px">
+                ${cleanName}
+            </text>
 
-        const bgRect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-        bgRect.setAttribute("x", "100"); 
-        bgRect.setAttribute("y", yPosition);
-        bgRect.setAttribute("width", "350"); 
-        bgRect.setAttribute("height", "22");
-        bgRect.setAttribute("fill", "#22201f"); 
-        bgRect.setAttribute("rx", "5");
-        svg.appendChild(bgRect);
+            <!-- Background Bar -->
+            <rect x="100" y="${yPosition}" width="350" height="22" fill="#22201f" rx="5" />
 
-        const valueRect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-        valueRect.setAttribute("x", "100");
-        valueRect.setAttribute("y", yPosition);
-        const barWidth = (value / 100) * 350; 
-        valueRect.setAttribute("width", barWidth); 
-        valueRect.setAttribute("height", "22");
-        valueRect.setAttribute("fill", "#e7d59e"); 
-        valueRect.setAttribute("rx", "5");
-        svg.appendChild(valueRect);
+            <!-- Value Progress Bar -->
+            <rect x="100" y="${yPosition}" width="${barWidth}" height="22" fill="#e7d59e" rx="5" />
 
-        const percentText = document.createElementNS("http://www.w3.org/2000/svg", "text");
-        
-        percentText.setAttribute("x", "460"); 
-        percentText.setAttribute("y", yPosition + 16); 
-        percentText.setAttribute("fill", "#e7d59e"); 
-        percentText.setAttribute("font-size", "13px");
-        percentText.setAttribute("font-weight", "bold");
-        percentText.setAttribute("text-anchor", "start"); 
-        percentText.textContent = value + "%";
-        svg.appendChild(percentText);
+            <!-- Percentage Text -->
+            <text x="460" y="${yPosition + 16}" fill="#e7d59e" font-size="13px" font-weight="bold" text-anchor="start">
+                ${value}%
+            </text>
+        `;
     });
+
+    svg.innerHTML = svgContent;
 }

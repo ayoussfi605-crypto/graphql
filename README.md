@@ -2,7 +2,6 @@
 
 A single-page web app that authenticates against the Zone01 Oujda platform and displays a personal student profile — XP, level, audit ratio, skills and a cumulative XP graph — built entirely with **vanilla JavaScript** (no frameworks, no charting libraries) and the platform's **GraphQL** API.
 
-## Host name
 
 https://js-graphql.netlify.app/
 
@@ -59,15 +58,8 @@ https://js-graphql.netlify.app/
 
 ## 🚀 Getting Started
 
-1. Clone the repo.
-2. No build step required — pure static site.
-3. Serve the folder with any static server (e.g. VS Code **Live Server**):
-   ```bash
-   # or with Python
-   python3 -m http.server 5500
-   ```
-4. Open `http://127.0.0.1:5500/index.html`.
-5. Log in with your Zone01 Oujda credentials.
+**Host name:**
+click into -> `https://js-graphql.netlify.app/`
 
 ## 🔒 Notes
 

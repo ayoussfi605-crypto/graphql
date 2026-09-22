@@ -1,6 +1,4 @@
-/* ==========================================================================
-   1. DESIGN TOKENS & RESETS
-   ========================================================================== */
+
 :root {
     /* Color Palette */
     --bg-main: #0b0f19;
@@ -40,9 +38,6 @@ body {
     line-height: 1.5;
 }
 
-/* ==========================================================================
-   2. LAYOUT ENGINE (CSS GRID)
-   ========================================================================== */
 .dashboard-container {
     max-width: 1400px;
     margin: 0 auto;
@@ -52,9 +47,6 @@ body {
     width: 100%;
 }
 
-/* ==========================================================================
-   3. BASE CARD COMPONENT
-   ========================================================================== */
 .card {
     background-color: var(--bg-card);
     border: 1px solid var(--border-color);
@@ -74,9 +66,7 @@ body {
     margin-bottom: 15px;
 }
 
-/* ==========================================================================
-   4. METRIC CARDS & DATA DISPLAYS
-   ========================================================================== */
+/* METRIC CARDS & DATA DISPLAYS */
 .metric-card {
     grid-column: span 3;
     display: flex;
@@ -148,9 +138,7 @@ body {
 .trend-up { color: var(--accent-teal); }
 .trend-down { color: var(--accent-magenta); }
 
-/* ==========================================================================
-   5. PROGRESS BARS & RADAR GRAPH CONTAINERS
-   ========================================================================== */
+/* PROGRESS BARS & RADAR GRAPH CONTAINERS */
 .project-row {
     margin-bottom: 12px;
 }
@@ -223,9 +211,7 @@ body {
     min-height: 360px;
 }
 
-/* ==========================================================================
-   6. GLOBAL APPLICATION HEADER
-   ========================================================================== */
+/*GLOBAL APPLICATION HEADER */
 .dashboard-header {
     position: relative;
     overflow: hidden;
@@ -329,9 +315,7 @@ body {
     box-shadow: 0 0 15px rgba(246,56,220,0.35), 0 0 30px rgba(246,56,220,0.2);
 }
 
-/* ==========================================================================
-   7. GATEWAY AUTHENTICATION / LOGIN PAGE
-   ========================================================================== */
+/* GATEWAY AUTHENTICATION / LOGIN PAGE */
 .login-main-container {
     height: 100vh;
     display: flex;
@@ -500,9 +484,8 @@ body {
     outline: none;
 }
 
-/* ==========================================================================
-   8. EXCEPTIONS / NO DATA ERRORS
-   ========================================================================== */
+
+/* EXCEPTIONS / NO DATA ERRORS */
 .no-data-container {
     min-height: 100vh;
     display: flex;
@@ -588,9 +571,7 @@ body {
 
 .retry-btn:active { transform: translateY(1px); }
 
-/* ==========================================================================
-   9. UTILITIES / ANIMATIONS / CUSTOM SCROLLBARS
-   ========================================================================== */
+/* UTILITIES / ANIMATIONS / CUSTOM SCROLLBARS */
 .badge {
     display: inline-block;
     padding: 4px 8px;
