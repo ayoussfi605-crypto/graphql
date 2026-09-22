@@ -1,5 +1,6 @@
 const URL = "https://learn.zone01oujda.ma/api/graphql-engine/v1/graphql";
 
+// User -> credentials -> login() -> API Zone01 -> if credentials is valid -> token
 export async function login(data) {
     try {
         const credentials = `${data.identifier}:${data.password}`;
@@ -10,6 +11,7 @@ export async function login(data) {
                 method: "POST",
                 headers: {
                     Authorization:
+                    //encode a credential to base64 
                         'Basic ' + btoa(utf8Credentials),
                 },
             }
@@ -53,6 +55,7 @@ export async function isAuthenticated() {
         });
 
         const result = await response.json();
+        // console.log(result.data);
         
         // if response ok and data is exist, token is valid
         if (response.ok && result.data && result.data.user && result.data.user.length > 0) {

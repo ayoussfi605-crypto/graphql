@@ -20,7 +20,11 @@ export async function graphqlRequest(query) {
     } catch (error) {
 
         console.error("Error fetching data:",error);
-    
+         const errBox = document.getElementById("error-message");
+            errBox.textContent = "internal sever error";
+            setTimeout(() => {
+                errBox.textContent = "";
+            }, 2000);
     }
 
 };

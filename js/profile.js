@@ -136,14 +136,14 @@ document.getElementById("logout-btn").addEventListener("click", logout);
 // Function to format the XP value into a more readable format
 function formatXP(xp) {
     if (xp >= 1000000) {
-        return (xp / 1000000).toFixed(0) + " MB";
+        return (xp / 1000000).toFixed(2) + " MB";
     }
 
     if (xp >= 1000) {
-        return (xp / 1000).toFixed(0) + " kB";
+        return (xp / 1000).toFixed(2) + " kB";
     }
 
-    return xp.toFixed(0) + " B";
+    return xp + " B";
 }
 
 // Function to get the best skills from the list of skills
@@ -151,12 +151,11 @@ function getBestSkills(skills) {
     const best = {};
     skills.forEach(skill => {
       // Check if the skill type is not already in the best object or if the current skill amount is greater than the existing one
-        if(
-            !best[skill.type] ||
-            skill.amount > best[skill.type]
-        ){
-
-            best[skill.type] = skill.amount;
+      if(
+        !best[skill.type] ||
+        skill.amount > best[skill.type]
+      ){
+        best[skill.type] = skill.amount;
         }
 
     });

@@ -1,3 +1,5 @@
+
+// Audit ration graph
 export function drawAuditChart(auditRatio) {
     const svg = document.getElementById("audit-chart");
     if (!svg) return;
@@ -18,42 +20,51 @@ export function drawAuditChart(auditRatio) {
     svg.setAttribute("aria-label", `Audit ratio ${numericRatio.toFixed(1)}`);
 
     // Background Circle
-    const backgroundCircle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    backgroundCircle.setAttribute("cx", String(center));
-    backgroundCircle.setAttribute("cy", String(center));
-    backgroundCircle.setAttribute("r", String(radius));
-    backgroundCircle.setAttribute("fill", "none");
-    backgroundCircle.setAttribute("stroke", "#D10056");
-    backgroundCircle.setAttribute("stroke-width", "18"); 
+    // const backgroundCircle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    // backgroundCircle.setAttribute("cx", String(center));
+    // backgroundCircle.setAttribute("cy", String(center));
+    // backgroundCircle.setAttribute("r", String(radius));
+    // backgroundCircle.setAttribute("fill", "none");
+    // backgroundCircle.setAttribute("stroke", "#D10056");
+    // backgroundCircle.setAttribute("stroke-width", "18"); 
+    const backgroundCircle = `
+    <circle cx="${center}" cy="${center}" r="${radius}" fill="none" stroke="#D10056" stroke-width="18" />
+    `
 
     // Progress Circle
-    const progressCircle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    progressCircle.setAttribute("cx", String(center));
-    progressCircle.setAttribute("cy", String(center));
-    progressCircle.setAttribute("r", String(radius));
-    progressCircle.setAttribute("fill", "none");
-    progressCircle.setAttribute("stroke", "#FFFC8C");
-    progressCircle.setAttribute("stroke-width", "18");
-    progressCircle.setAttribute("stroke-linecap", "round");
-    progressCircle.setAttribute("stroke-dasharray", `${circumference} ${circumference}`);
-    progressCircle.setAttribute("stroke-dashoffset", String(dashOffset));
-    progressCircle.setAttribute("transform", `rotate(-90 ${center} ${center})`);
-
+    // const progressCircle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    // progressCircle.setAttribute("cx", String(center));
+    // progressCircle.setAttribute("cy", String(center));
+    // progressCircle.setAttribute("r", String(radius));
+    // progressCircle.setAttribute("fill", "none");
+    // progressCircle.setAttribute("stroke", "#FFFC8C");
+    // progressCircle.setAttribute("stroke-width", "18");
+    // progressCircle.setAttribute("stroke-linecap", "round");
+    // progressCircle.setAttribute("stroke-dasharray", `${circumference} ${circumference}`);
+    // progressCircle.setAttribute("stroke-dashoffset", String(dashOffset));
+    // progressCircle.setAttribute("transform", `rotate(-90 ${center} ${center})`);
+    const progressCircle = `
+    <circle cx="${center}" cy="${center}" r="${radius}" fill="none" stroke="#FFFC8C" stroke-width="18" stroke-linecap="round" 
+    stroke-dasharray="${circumference} ${circumference}" stroke-dashoffset="${dashOffset}" transform="rotate(-90 ${center} ${center})" />
+    `
     // Center Text 
-    const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    text.setAttribute("x", String(center));
-    text.setAttribute("y", String(center + 10));
-    text.setAttribute("fill", "#E1DCC9");
-    text.setAttribute("font-size", "36"); 
-    text.setAttribute("font-weight", "700");
-    text.setAttribute("text-anchor", "middle");
-    text.textContent = numericRatio.toFixed(1);
-
-    svg.appendChild(backgroundCircle);
-    svg.appendChild(progressCircle);
-    svg.appendChild(text);
+    // const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    // text.setAttribute("x", String(center));
+    // text.setAttribute("y", String(center + 10));
+    // text.setAttribute("fill", "#E1DCC9");
+    // text.setAttribute("font-size", "36"); 
+    // text.setAttribute("font-weight", "700");
+    // text.setAttribute("text-anchor", "middle");
+    // text.textContent = numericRatio.toFixed(1);
+    const text = `
+        <text x=${center} y=${center+10} fill="#E1DCC9" font-size="36" font-weight="700" text-anchor="middle">${numericRatio.toFixed(1)}<text/>
+    `
+    svg.innerHTML += (backgroundCircle);
+    svg.innerHTML += (progressCircle);
+    svg.innerHTML += (text);
 }
 
+// skils graph
 export function drawSkillsChart(bestSkills) {
     const svg = document.getElementById("skills-chart");
     svg.innerHTML = ""; 
