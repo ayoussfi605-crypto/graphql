@@ -91,9 +91,6 @@ query fetchMyDashboard {
         <p>Email: ${email}</p>
         <p>First Name: ${firstName}</p>
         <p>Last Name: ${lastName}</p>
-        <p>CIN: ${cin}</p>
-        <p>Address (Region): ${addressRegion}</p>
-        <p>Address (Street): ${addressStreet}</p>
     `;
     
  // Total XP
