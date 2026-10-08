@@ -85,7 +85,7 @@ query fetchMyDashboard {
     document.getElementById("avatar-container").innerHTML = `
         <img src="${avatar}" alt="Profile Picture" class="avatar">
     `;
-
+      // User Info
     document.getElementById("user-info-container").innerHTML = `
         <p class="usrnm">Welcome back, ${login}</p>
         <p>Email: ${email}</p>
