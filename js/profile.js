@@ -60,7 +60,7 @@ query fetchMyDashboard {
   
 `);
 
-
+// Check if the result is valid and contains the necessary data
     const studentInfo = result?.data?.student?.[0];
     const totalXP = result?.data?.xpAggr?.aggregate?.sum?.amount ?? 0;
     const timeline = studentInfo?.timeline || [];
