@@ -1,5 +1,5 @@
 const URL = "https://learn.zone01oujda.ma/api/graphql-engine/v1/graphql";
-
+//fetch data use the query and Bearer metode
 export async function graphqlRequest(query) {
 
     const token = localStorage.getItem("token");
