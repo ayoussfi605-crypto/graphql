@@ -91,7 +91,6 @@ query fetchMyDashboard {
         <p>Email: ${email}</p>
         <p>First Name: ${firstName}</p>
         <p>Last Name: ${lastName}</p>
-        <p>Audit Ratio: ${auditRatio}</p>
     `;
     
  // Total XP
